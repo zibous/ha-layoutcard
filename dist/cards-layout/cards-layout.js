@@ -18,7 +18,7 @@ console.info(
 
 /**
  * custom cards layout
- *
+ * credits to https://github.com/ofekashery/vertical-stack-in-card
  */
 class CardsLayout extends HTMLElement {
     constructor() {
@@ -98,6 +98,7 @@ class CardsLayout extends HTMLElement {
 
     /**
      * add the card css tags
+     * TODO: export to css file, try to find a way to include...
      * @param {*} parent
      */
     addCss(parent) {
@@ -235,6 +236,9 @@ class CardsLayout extends HTMLElement {
 
     /**
      * render the card elements
+     * 
+     * TODO: // async mode create cards ?
+     *       // use stage for first render ?
      */
     async renderCards() {
         // container for all cards
@@ -327,7 +331,6 @@ class CardsLayout extends HTMLElement {
     /**
      * The height of your card. Home Assistant uses this to automatically
      * distribute all cards over the available columns.
-     *
      */
     getCardSize() {
         return 10;
@@ -338,14 +341,20 @@ customElements.define("cards-layout", CardsLayout);
 
 /** --------------------------------------------------------------------
 
-  Cards Layout
+  Cards Layout structure
   
   - type: 'custom: cards-layout'
     cards:
       - row
         - col
+          - entities:
+            - card
+            - card
         - col
+          - entities:
+            - card
       - row
         - col
+          ....
   
 /** -------------------------------------------------------------------*/
