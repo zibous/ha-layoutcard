@@ -23,10 +23,13 @@ views:
               - col: null
                 width: 50%
                 height: 320
-                title: Auswertung 1 (3 Spalten - equal height)
+                title: Auswertung 1 (4 Spalten - equal height)
                 description: Hier werden alle Auswerungen für den Stromverbrauch angezeigt
                 entities:
                   - type: 'custom:simple-card'
+                    style: >
+                      background: rgba(0, 0, 0, 0) linear-gradient(rgb(241, 39,
+                      17), rgb(245, 175, 25)) repeat scroll 0% 0%; height: 300px
                     title: Daten 1
                     entities:
                       - sun.sun
@@ -40,13 +43,13 @@ views:
                         display: true
                         text: Orangenbaum
                     entities:
-                      - entity: sensor.orangenbaum_battery
-                        name: Batterie
                       - entity: sensor.orangenbaum_moisture
-                        name: Säure
-                      - entity: sensor.orangenbaum_battery
-                        name: Batterie
+                      - entity: sensor.orangenbaum_temperature
+                      - entity: sensor.orangenbaum_conductivity
                   - type: 'custom:chart-card'
+                    style: |
+                      background: linear-gradient(to bottom, #009fff, #ec2f4b); 
+                      color: #FFFFFF
                     title: Chart 2
                     icon: 'mdi:nutrition'
                     height: 240
@@ -57,20 +60,28 @@ views:
                         text: Orangenbaum
                     entities:
                       - entity: sensor.orangenbaum_battery
-                        name: Batterie
                       - entity: sensor.orangenbaum_moisture
-                        name: Säure
-                      - entity: sensor.orangenbaum_battery
-                        name: Batterie
+                      - entity: sensor.orangenbaum_temperature
+                      - entity: sensor.orangenbaum_conductivity
+                  - type: 'custom:mini-graph-card'
+                    height: 193
+                    style: >
+                      background: linear-gradient(to top, #fc4a1a, #f7b733);
+                      color:#FFFFFF
+                    entities:
+                      - entity: sensor.temperatur_indoor
+                        name: Innenraum
+                      - entity: sensor.orangenbaum_light
           - row:
               - col: null
                 title: Auswertung 2 (3 Spalten)
                 description: Hier werden alle Auswerungen für den Wasserverbrauch angezeigt
                 entities:
                   - type: markdown
-                    style: |
-                      border: none;
-                      background: transparent;
+                    style: >
+                      height:300px; background: linear-gradient(45deg, #5fc9f8,
+                      #fecb2e, #fd9426, #fc3158, #147efb,
+                      #53d769);                
                     content: |
                       Hello, {{user}}
                   - type: 'custom:chart-card'
@@ -83,12 +94,9 @@ views:
                         display: true
                         text: Orangenbaum
                     entities:
-                      - entity: sensor.orangenbaum_battery
-                        name: Batterie
                       - entity: sensor.orangenbaum_moisture
-                        name: Säure
-                      - entity: sensor.orangenbaum_battery
-                        name: Batterie
+                      - entity: sensor.orangenbaum_temperature
+                      - entity: sensor.orangenbaum_conductivity
                   - type: 'custom:chart-card'
                     title: Chart 4
                     icon: 'mdi:nutrition'
@@ -99,9 +107,6 @@ views:
                         display: true
                         text: Orangenbaum
                     entities:
-                      - entity: sensor.orangenbaum_battery
-                        name: Batterie
                       - entity: sensor.orangenbaum_moisture
-                        name: Säure
-                      - entity: sensor.orangenbaum_battery
-                        name: Batterie
+                      - entity: sensor.orangenbaum_temperature
+                      - entity: sensor.orangenbaum_conductivity
