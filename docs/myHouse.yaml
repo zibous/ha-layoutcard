@@ -1,0 +1,58 @@
+views:
+  - title: Chart Test
+    panel: true
+    cards:
+      - type: 'custom:cards-layout'
+        title: Übersicht
+        icon: 'mdi:home'
+        description: Hier sind alle Räume mit Sensoren...
+        width: 80%
+        cards:
+          - row:
+              - col: null
+                width: 100%
+                title: Auswertungen
+                description: Hier werden alle Auswerungen für den Stromverbrauch angezeigt
+                entities:
+                  - type: picture
+                    title: Card 1
+                    image: >-
+                      https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
+          - row:
+              - col: null
+                width: 50%
+                title: Auswertungen
+                description: Hier werden alle Auswerungen für den Stromverbrauch angezeigt
+                entities:
+                  - type: picture
+                    title: Eingang
+                    image: >-
+                      https://images.unsplash.com/photo-1521446477144-773b2dd9b1af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
+                  - type: picture
+                    title: Eingang
+                    image: >-
+                      https://images.unsplash.com/photo-1546551613-09c2f83e1ede?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
+          - row:
+              - col: null
+                width: 50%
+                title: Auswertungen
+                description: Hier werden alle Auswerungen für den Stromverbrauch angezeigt
+                entities:
+                  - type: picture
+                    title: Eingang
+                    image: >-
+                      https://images.unsplash.com/photo-1560635921-171138a3955e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
+                  - type: picture
+                    title: Eingang
+                    image: >-
+                      https://images.unsplash.com/photo-1545022274-cdffe6d68075?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
+          - row:
+              - col: null
+                width: 100%
+                title: Auswertungen
+                description: Hier werden alle Auswerungen für den Stromverbrauch angezeigt
+                entities:
+                  - type: picture
+                    title: Eingang
+                    image: >-
+                      https://images.unsplash.com/photo-1544984243-ec57ea16fe25?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80

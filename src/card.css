@@ -1,0 +1,82 @@
+div.cl-layout {
+    position: relative;
+    margin: 0 auto;
+}
+.cl-icon {
+    vertical-align: bottom;
+    padding: 0 8px 0 0;
+}
+ha-card,
+.cl-card {
+    margin: 0.5em !important;
+}
+div.cl-layout-row {
+    width: 100%;
+    margin-bottom: 3em;
+}
+div.cl-layout-col {
+    margin: 0 auto;
+    width: 100%;
+}
+div.cl-layout-col p {
+    white-space: pre-wrap;
+}
+div.cl-layout h1,
+div.cl-layout-col h1,
+div.cl-layout-col h2 {
+    line-height: 1.2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 99%;
+    margin: 1.2em 0 0.5em 0;
+}
+.cl-card-layer {
+    position: relative;
+    float: left;
+    margin: 0;
+}
+.cl-card {
+    background: transparent !important;
+}
+.cl-text {
+    margin: 0 0 2em 2em;
+}
+.clearfix::before,
+.clearfix::after {
+    content: " ";
+    display: table;
+}
+.clearfix::after {
+    content: ".";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+@media (max-width: 620px) {
+    div.cl-layout {
+        min-width: 95% !important;
+        max-width: 95% !important;
+        margin: 0.5em !important;
+    }
+    .cl-card-layer {
+        float: none;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    div.cl-layout-col > * {
+        margin: 0.3em;
+    }
+    ha-card,
+    .cl-card {
+        margin: 0.3em !important;
+    }
+    div.cl-layout-col h1,
+    div.cl-layout-col h2 {
+        margin: 1em 0 0.3em 0;
+    }
+    div.cl-layout-col p {
+        margin: 0.3em 0 1em 0;
+    }
+}

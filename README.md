@@ -1,2 +1,1 @@
-# ha-layoutcard
-lovelace placement of cards
+# Homeassitant Layout Card
