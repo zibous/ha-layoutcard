@@ -230,7 +230,7 @@ class CardsLayout extends HTMLElement {
     /**
      * render the card elements
      */
-    renderCards() {
+    async renderCards() {
         // container for all cards
         const view_layout = document.createElement("div");
         view_layout.setAttribute("class", "cl-layout");
@@ -299,11 +299,13 @@ class CardsLayout extends HTMLElement {
                         card_layer.setAttribute("class", "cl-card-layer");
                         card_layer.style.width = card_layer.style.maxWidth = _cardcss.width;
                         card_layer.style.height = card_layer.style.minHeight = _cardcss.height;
-                        if (card.updateComplete) {
-                            card.updateComplete.then(() => this.styleCard(card, _cards[index]));
-                        } else {
-                            this.styleCard(card, _cards[index]);
-                        }
+                        window.setTimeout(() => {
+                            if (card.updateComplete) {
+                                card.updateComplete.then(() => this.styleCard(card, _cards[index]));
+                            } else {
+                                this.styleCard(card, _cards[index]);
+                            }
+                        }, 100);
                         card_layer.append(card);
                         view_col.appendChild(card_layer);
                     });
@@ -313,12 +315,6 @@ class CardsLayout extends HTMLElement {
             });
             view_layout.append(view_row);
         });
-
-        // show all cards for this layout
-        // TODO: check if we have to use staging ??
-        while (this.hasChildNodes()) {
-            this.removeChild(this.lastChild);
-        }
         this.appendChild(view_layout);
     }
 

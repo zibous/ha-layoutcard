@@ -41,7 +41,7 @@ I'm still looking for help and would be happy if someone would get in touch to h
     ```
 <br>
 
-## Options
+## Options layout
 
 | Name | Type | Default | Description
 | ---- | ---- | ------- | -----------
@@ -54,6 +54,41 @@ I'm still looking for help and would be happy if someone would get in touch to h
 | col |  | **Required** | column for cards
 | entities | list | **Required** | List of cards
 
+## Options layout row
+
+| Name | Type | Default | Description
+| ---- | ---- | ------- | -----------
+| row |  | **Required** | section for columns
+
+## Options layout col
+
+| Name | Type | Default | Description
+| ---- | ---- | ------- | -----------
+| col |  | **Required** | column for cards
+| title | string | **Optional** | title
+| description | string | **Optional** | Card section text
+| width | number, string | **Required** | max width card row or column
+| height | number, string | **Required** | max width card row or column
+| entities | list | **Required** | List of cards
+
+## Options layout entities
+
+| Name | Type | Default | Description
+| ---- | ---- | ------- | -----------
+| entities | list | **Required** | List of cards
+| type | string | **Required** | `card type`
+| style | string | **Optional** | CSS Style tags for the card
+
+### Entity Style examples
+```yaml
+- type: 'custom:simple-card'
+   style: >
+       background: linear-gradient(to top, #fc4a1a, #f7b733);
+       color:#FFFFFF;
+       height: 220px;
+
+
+```
 
 ## Using the card
 Add a custom card in your `ui-lovelace.yaml`
