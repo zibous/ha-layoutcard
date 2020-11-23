@@ -2,7 +2,7 @@
 
 const appinfo = {
     name: "✓ custom:cards-layout",
-    version: "0.0.3"
+    version: "0.0.4"
 };
 console.info(
     "%c " + appinfo.name + "    %c ▪︎▪︎▪︎▪︎ Version: " + appinfo.version + " ▪︎▪︎▪︎▪︎ ",
@@ -227,7 +227,16 @@ class CardsLayout extends HTMLElement {
             }
         }
     }
-
+    /**
+     * stage layer
+     * TODO: test for better render process ?
+     */
+    createStageLayer(){
+        this.stage_layer = document.createElement("div");
+        this.stage_layer.style.cssText = "display:none";
+        this.stage_layer.id="stage";
+        return true;
+    }
     /**
      * render the card elements
      * 
@@ -240,7 +249,6 @@ class CardsLayout extends HTMLElement {
         view_layout.setAttribute("class", "cl-layout");
         view_layout.setAttribute("id", "cl-" + this.id);
         this.addCss(view_layout);
-
         if (this._config.width) {
             view_layout.style.width = view_layout.style.minWidth = this._config.width;
         }

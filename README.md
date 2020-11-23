@@ -167,6 +167,9 @@ views:
 
 <a href="https://www.buymeacoff.ee/zibous" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
+## TODO
+- better css handling (load css once not per card)
+- initialize - render cards to stage, re-assign to root
 
 ## Helper
 - [YAML to JSON Online](https://www.convertjson.com/yaml-to-json.htm) - Use this online tool to convert YAML into JSON. 
