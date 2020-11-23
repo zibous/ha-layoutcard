@@ -121,7 +121,10 @@ gulp.task("build", function () {
         .pipe(concat(settings.outfile))
         .pipe(minify())
         .pipe( 
-		    headerComment(`
+            headerComment(`
+              <%= pkg.name %> <%= pkg.version %>		
+	          <%= pkg.homepage %>
+	  
       		  License: <%= pkg.license %>
       		  Generated on <%= moment().format('YYYY') %>
       		  Author: <%= _.capitalize(pkg.author) %>

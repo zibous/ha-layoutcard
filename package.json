@@ -1,6 +1,6 @@
 {
   "name": "ha-layoutcard",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Lovelace placement of cards",
   "homepage": "https://github.com/zibous/ha-layoutcard",
   "main": "src/main.js",

@@ -1,4 +1,7 @@
 /**
+ * ha-layoutcard 0.0.4
+ * https://github.com/zibous/ha-layoutcard
+ * 
  * License: MIT
  * Generated on 2020
  * Author: Peter siebler
@@ -299,7 +302,7 @@ class CardsLayout extends HTMLElement {
                     view_col.append(view_descr);
                 }
 
-                let _cardWidth = item.width || "320px";
+                let _cardWidth = item.width || "100%";
                 let _cardHeight = item.height || "100%";
                 let _cardcss = {
                     width: typeof _cardWidth == "number" ? _cardWidth + "px" : _cardWidth,
