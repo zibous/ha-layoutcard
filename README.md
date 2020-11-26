@@ -170,6 +170,7 @@ views:
 ## TODO
 - better css handling (load css once not per card)
 - initialize - render cards to stage, re-assign to root
+- how to handle end devices with low bandwidth ?
 
 ## Helper
 - [YAML to JSON Online](https://www.convertjson.com/yaml-to-json.htm) - Use this online tool to convert YAML into JSON. 

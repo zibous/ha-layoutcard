@@ -11,8 +11,8 @@ views:
           - row:
               - col: null
                 width: 100%
-                title: Übersicht - Spalte 1
-                description: Übersicht der Auswertung
+                title: Testcase Picture
+                description: Darstellung mit einer picture-glance card.
                 entities:
                   - type: picture-glance
                     title: Eingang
@@ -23,21 +23,39 @@ views:
               - col: null
                 width: 50%
                 height: 320
-                title: Auswertung 1 (4 Spalten - equal height)
-                description: Hier werden alle Auswerungen für den Stromverbrauch angezeigt
+                title: Testcase mit lovelace cards
+                description: >-
+                  Darstellung der Karten custom:simple-card, lovelace-markdown,
+                  custom:chart-card, custom:mini-graph-card.
                 entities:
                   - type: 'custom:simple-card'
+                    clock: true
                     style: >
-                      background: rgba(0, 0, 0, 0) linear-gradient(rgb(241, 39,
-                      17), rgb(245, 175, 25)) repeat scroll 0% 0%; height: 300px
-                    title: Daten 1
+                      height:300px; background: rgba(0, 0, 0, 0)
+                      linear-gradient(rgb(241, 39,17), rgb(245, 175, 25)) repeat
+                      scroll 0% 0%; height: 300px; color: #FFFFFF   
+                    title: Willkommen Fremder
+                    icon: 'mdi:home'
+                    text: >-
+                      Dies ist ein Beispiel für eine einfache Karte mit einer
+                      Uhr.
                     entities:
                       - sun.sun
+                  - type: markdown
+                    style: >
+                      height:300px; background: linear-gradient(45deg, #5fc9f8,
+                      #fecb2e, #fd9426, #fc3158, #147efb,
+                      #53d769);                
+                    content: |
+                      Hello, {{user}} 
+                      markdown card sample
                   - type: 'custom:chart-card'
-                    title: Chart 1
+                    title: 'PIE - custom:chart-card'
                     icon: 'mdi:nutrition'
                     height: 240
                     chart: pie
+                    theme:
+                      cardbackground: 'linear-gradient(to bottom, #e6dada, #274046);'
                     options:
                       title:
                         display: true
@@ -48,9 +66,8 @@ views:
                       - entity: sensor.orangenbaum_conductivity
                   - type: 'custom:chart-card'
                     style: |
-                      background: linear-gradient(to bottom, #009fff, #ec2f4b); 
-                      color: #FFFFFF
-                    title: Chart 2
+                      background: linear-gradient(to bottom, #009fff, #ec2f4b);
+                    title: 'BAR - custom:chart-card'
                     icon: 'mdi:nutrition'
                     height: 240
                     chart: bar
@@ -63,6 +80,25 @@ views:
                       - entity: sensor.orangenbaum_moisture
                       - entity: sensor.orangenbaum_temperature
                       - entity: sensor.orangenbaum_conductivity
+                  - type: 'custom:chart-card'
+                    style: |
+                      background: linear-gradient(to bottom, #009fff, #ec2f4b);
+                    title: 'LINE custom:chart-card'
+                    icon: 'mdi:nutrition'
+                    height: 282
+                    chart: line
+                    options:
+                      title:
+                        display: true
+                        text: Gasverbrauch
+                      layout:
+                        padding:
+                          left: 50
+                          right: 50
+                          top: 0
+                          bottom: 0
+                    entities:
+                      - entity: sensor.gas_verbrauch_m3
                   - type: 'custom:mini-graph-card'
                     height: 193
                     style: >
@@ -72,41 +108,49 @@ views:
                       - entity: sensor.temperatur_indoor
                         name: Innenraum
                       - entity: sensor.orangenbaum_light
+                        name: Licht
+                        y_axis: secondary
           - row:
               - col: null
-                title: Auswertung 2 (3 Spalten)
-                description: Hier werden alle Auswerungen für den Wasserverbrauch angezeigt
                 entities:
-                  - type: markdown
-                    style: >
-                      height:300px; background: linear-gradient(45deg, #5fc9f8,
-                      #fecb2e, #fd9426, #fc3158, #147efb,
-                      #53d769);                
-                    content: |
-                      Hello, {{user}}
-                  - type: 'custom:chart-card'
-                    title: Chart 3
-                    icon: 'mdi:nutrition'
-                    height: 240
-                    chart: doughnut
-                    options:
-                      title:
-                        display: true
-                        text: Orangenbaum
+                  - type: 'custom:simple-card'
+                    title: Anzeige von Buttons mit Status
+                    icon: 'mdi:home'
+                    mode: buttons
                     entities:
-                      - entity: sensor.orangenbaum_moisture
-                      - entity: sensor.orangenbaum_temperature
-                      - entity: sensor.orangenbaum_conductivity
-                  - type: 'custom:chart-card'
-                    title: Chart 4
-                    icon: 'mdi:nutrition'
-                    height: 240
-                    chart: pie
-                    options:
-                      title:
-                        display: true
-                        text: Orangenbaum
+                      - sensor.gasuhr_status
+                      - sensor.gas_verbrauch_m3
+          - row:
+              - col: null
+                title: Status Informationen
+                description: Kleine Karten (homekit-card)
+                entities:
+                  - type: 'custom:homekit-card'
+                    title: Hacs
+                    useBrightness: false
+                    titleColor: '#fff'
+                    enableColumns: false
+                    statePositionTop: true
+                    home: false
                     entities:
-                      - entity: sensor.orangenbaum_moisture
-                      - entity: sensor.orangenbaum_temperature
-                      - entity: sensor.orangenbaum_conductivity
+                      - title: '  '
+                        entities:
+                          - entity: sensor.gas_verbrauch_m3
+                          - entity: sensor.kohlenhydrate_makronahrstoff
+                          - entity: sensor.hacs
+                          - entity: sensor.temperatur_indoor
+                          - entity: sensor.orangenbaum_light
+                          - entity: sensor.orangenbaum_moisture
+                          - entity: sensor.orangenbaum_temperature
+                          - entity: sensor.orangenbaum_conductivity
+                  - type: 'custom:homekit-card'
+                    title: Hacs
+                    useBrightness: false
+                    titleColor: '#fff'
+                    enableColumns: false
+                    statePositionTop: true
+                    home: false
+                    entities:
+                      - title: '  '
+                        entities:
+                          - entity: sensor.hacs

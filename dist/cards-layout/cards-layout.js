@@ -24,12 +24,22 @@ console.info(
  * credits to https://github.com/ofekashery/vertical-stack-in-card
  */
 class CardsLayout extends HTMLElement {
+
+    static get properties() {
+        return {
+            _config: {},
+            _hass: {}
+        };
+    }
+    
     constructor() {
         super();
+        // console.log(new Date().toISOString(), appinfo.name, "Constructor");
     }
 
     set hass(hass) {
         this._hass = hass;
+        this.logInfo("HASS Reload Data ???")
     }
 
     /**
@@ -54,7 +64,7 @@ class CardsLayout extends HTMLElement {
      * @param {*} args
      */
     logInfo(...args) {
-        if (this.logenabled) console.info(new Date().toISOString(), ...args);
+        if (this.logenabled) console.info(new Date().toISOString(), appinfo.name, ...args);
     }
 
     /**
@@ -116,9 +126,10 @@ class CardsLayout extends HTMLElement {
             vertical-align: bottom;
             padding: 0 8px 0 0;
         }
-        ha-card,
-        .cl-card {
+        .cl-card, ha-card.cl-card {
             margin: 0.5em !important;
+            flex:none !important!;
+            background: transparent !important;
         }
         div.cl-layout-row {
             width: 100%;
@@ -146,9 +157,6 @@ class CardsLayout extends HTMLElement {
             float: left;
             margin: 0;
         }
-        .cl-card {
-            background: transparent !important;
-        }
         .cl-text {
             margin: 0 0 2em 2em;
         }
@@ -174,13 +182,10 @@ class CardsLayout extends HTMLElement {
                 float: none;
                 width: 100% !important;
                 max-width: 100% !important;
+                margin: 1.2em 0.3em;
             }
-            div.cl-layout-col > * {
-                margin: 0.3em;
-            }
-            ha-card,
-            .cl-card {
-                margin: 0.3em !important;
+            .cl-card, ha-card.cl-card {
+                margin: 0.3em 0.5em !important;
             }
             div.cl-layout-col h1,
             div.cl-layout-col h2 {
@@ -240,15 +245,15 @@ class CardsLayout extends HTMLElement {
      * stage layer
      * TODO: test for better render process ?
      */
-    createStageLayer(){
+    createStageLayer() {
         this.stage_layer = document.createElement("div");
         this.stage_layer.style.cssText = "display:none";
-        this.stage_layer.id="stage";
+        this.stage_layer.id = "stage";
         return true;
     }
     /**
      * render the card elements
-     * 
+     *
      * TODO: // async mode create cards ?
      *       // use stage for first render ?
      */
@@ -304,6 +309,7 @@ class CardsLayout extends HTMLElement {
 
                 let _cardWidth = item.width || "100%";
                 let _cardHeight = item.height || "100%";
+
                 let _cardcss = {
                     width: typeof _cardWidth == "number" ? _cardWidth + "px" : _cardWidth,
                     height: typeof _cardHeight == "number" ? _cardHeight + "px" : _cardHeight,
@@ -316,17 +322,34 @@ class CardsLayout extends HTMLElement {
                 Promise.all(promises).then((cards) => {
                     cards.forEach((card, index) => {
                         // container for the card
+                        const _cardSettings = _cards[index];
                         const card_layer = document.createElement("div");
                         card_layer.setAttribute("class", "cl-card-layer");
-                        card_layer.style.width = card_layer.style.maxWidth = _cardcss.width;
-                        card_layer.style.height = card_layer.style.minHeight = _cardcss.height;
+
+                        // const _width =
+                        //     _cardSettings && _cardSettings.width && isFinite(_cardSettings.width)
+                        //         ? _cardSettings.width + "px"
+                        //         : _cardSettings.width || _cardWidth;
+                        // const _height =
+                        //     _cardSettings && _cardSettings.height && isFinite(_cardSettings.height)
+                        //         ? _cardSettings.height + "px"
+                        //         : _cardSettings.height || _cardHeight;
+
+                        // card_layer.style.width = card_layer.style.maxWidth = _width || _cardcss.width;
+                        // card_layer.style.height = card_layer.style.minHeight = _height || _cardcss.height;
+
+                        card_layer.style.width = card_layer.style.maxWidth =  _cardcss.width || _cardWidth;
+                        card_layer.style.height = card_layer.style.minHeight = _cardcss.height || _cardWidth;
+
+                        // TODO: find a better method to set the style 
                         window.setTimeout(() => {
                             if (card.updateComplete) {
-                                card.updateComplete.then(() => this.styleCard(card, _cards[index]));
+                                card.updateComplete.then(() => this.styleCard(card, _cardSettings));
                             } else {
-                                this.styleCard(card, _cards[index]);
+                                this.styleCard(card, _cardSettings);
                             }
-                        }, 100);
+                        }, 200);
+
                         card_layer.append(card);
                         view_col.appendChild(card_layer);
                     });
@@ -344,7 +367,7 @@ class CardsLayout extends HTMLElement {
      * distribute all cards over the available columns.
      */
     getCardSize() {
-        return 10;
+        return 1;
     }
 }
 
