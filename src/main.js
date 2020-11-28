@@ -1,8 +1,11 @@
 "use strict";
 
+import "/hacsfiles/cards-layout/card-tools.js?module";
+
+
 const appinfo = {
     name: "✓ custom:cards-layout",
-    version: "0.0.4"
+    version: "0.0.5"
 };
 console.info(
     "%c " + appinfo.name + "    %c ▪︎▪︎▪︎▪︎ Version: " + appinfo.version + " ▪︎▪︎▪︎▪︎ ",
@@ -30,7 +33,6 @@ class CardsLayout extends HTMLElement {
 
     set hass(hass) {
         this._hass = hass;
-        this.logInfo("HASS Reload Data ???")
     }
 
     /**
@@ -187,6 +189,7 @@ class CardsLayout extends HTMLElement {
             }
         }
         `;
+        // this.shadowRoot.appendChild(_style);
         parent.appendChild(_style);
     }
 
@@ -351,6 +354,18 @@ class CardsLayout extends HTMLElement {
             view_layout.append(view_row);
         });
         this.appendChild(view_layout);
+    }
+
+    updateData(){
+        this.logInfo("updateData called")
+    }
+
+    connectedCallback() {
+        // this.logInfo("connectedCallback")
+    }
+
+    disconnectedCallback() {
+        // this.logInfo("connectedCallback")
     }
 
     /**

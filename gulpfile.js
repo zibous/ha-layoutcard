@@ -9,9 +9,9 @@ const zip = require("gulp-zip");
 
 const settings = {
     files: ["./src/main.js"],
-    libs: [],
+    libs: ["./src/libs/card-tools.js"],
     outfile: "cards-layout.js",
-    libsfile: "",
+    libsfile: "card-tools.js",
     lessfiles: "./src/chartjs.less",
     distfolder: "./dist/cards-layout",
     releasefolder: "./release",
@@ -136,12 +136,15 @@ gulp.task("build", function () {
 
 /**
  * default task
- * gulp.series(["cleanup", "build", "build-libs", "release", "deploy"], function (done) {
  */
 gulp.task(
-    "default",
-    gulp.series(["cleanup", "build", "release", "deploy"], function (done) {
-        // task code here
-        done();
-    })
+	"default",
+	gulp.series(
+		["cleanup", "build", "build-libs","release", "deploy"],
+		function (done) {
+			// task code here
+			done();
+		}
+	)
 );
+
