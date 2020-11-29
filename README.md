@@ -171,7 +171,7 @@ views:
 - better css handling (load css once not per card)
 - initialize - render cards to stage, re-assign to root
 - how to handle end devices with low bandwidth ?
-- how to call hass and config for a custom:card (update data custom:card do not work !) ?
+- ~~how to call hass and config for a custom:card (update data custom:card do not work !) ?~~  -->  this.provideHass(element);
 
 ## Helper
 - [YAML to JSON Online](https://www.convertjson.com/yaml-to-json.htm) - Use this online tool to convert YAML into JSON. 

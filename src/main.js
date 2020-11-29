@@ -1,11 +1,8 @@
 "use strict";
 
-import "/hacsfiles/cards-layout/card-tools.js?module";
-
-
 const appinfo = {
     name: "✓ custom:cards-layout",
-    version: "0.0.5"
+    version: "0.0.6"
 };
 console.info(
     "%c " + appinfo.name + "    %c ▪︎▪︎▪︎▪︎ Version: " + appinfo.version + " ▪︎▪︎▪︎▪︎ ",
@@ -18,21 +15,27 @@ console.info(
  * credits to https://github.com/ofekashery/vertical-stack-in-card
  */
 class CardsLayout extends HTMLElement {
+    // static get properties() {
+    //     return {
+    //         _config: {},
+    //         _hass: {}
+    //     };
+    // }
 
-    static get properties() {
-        return {
-            _config: {},
-            _hass: {}
-        };
-    }
-    
     constructor() {
         super();
-        // console.log(new Date().toISOString(), appinfo.name, "Constructor");
+        this.skipRender = false;
+        this.entities = [];
+        this.loginfo_enabled = true;
     }
 
     set hass(hass) {
+        if (hass === undefined) return;
+
         this._hass = hass;
+
+        if (this.skipRender) return;
+        this.skipRender = true;
     }
 
     /**
@@ -45,11 +48,13 @@ class CardsLayout extends HTMLElement {
         }
         this._config = config;
         this.logenabled = this._config.logger || true;
+        this.cards = [];
         this.id = Math.random().toString(36).substr(2, 9);
         if (window.loadCardHelpers) {
             this.helpers = await window.loadCardHelpers();
         }
         this.renderCards();
+    
     }
 
     /**
@@ -99,6 +104,7 @@ class CardsLayout extends HTMLElement {
         }
         const element = createThing(tag, cardConfig);
         element.hass = this._hass;
+        this.cards.push(element);
         return element;
     }
 
@@ -207,6 +213,7 @@ class CardsLayout extends HTMLElement {
                     ele.style.cssText = settings.style.replaceAll("\n", "");
                 }
                 ele.style.margin = "0.5em";
+                this.provideHass(element);
             } else {
                 let searchEles = element.shadowRoot.getElementById("root");
                 if (!searchEles) {
@@ -235,6 +242,7 @@ class CardsLayout extends HTMLElement {
             }
         }
     }
+
     /**
      * stage layer
      * TODO: test for better render process ?
@@ -245,6 +253,16 @@ class CardsLayout extends HTMLElement {
         this.stage_layer.id = "stage";
         return true;
     }
+
+    provideHass(element) {
+        if (document.querySelector("hc-main")) return document.querySelector("hc-main").provideHass(element);
+
+        if (document.querySelector("home-assistant"))
+            return document.querySelector("home-assistant").provideHass(element);
+
+        return undefined;
+    }
+
     /**
      * render the card elements
      *
@@ -320,22 +338,10 @@ class CardsLayout extends HTMLElement {
                         const card_layer = document.createElement("div");
                         card_layer.setAttribute("class", "cl-card-layer");
 
-                        // const _width =
-                        //     _cardSettings && _cardSettings.width && isFinite(_cardSettings.width)
-                        //         ? _cardSettings.width + "px"
-                        //         : _cardSettings.width || _cardWidth;
-                        // const _height =
-                        //     _cardSettings && _cardSettings.height && isFinite(_cardSettings.height)
-                        //         ? _cardSettings.height + "px"
-                        //         : _cardSettings.height || _cardHeight;
-
-                        // card_layer.style.width = card_layer.style.maxWidth = _width || _cardcss.width;
-                        // card_layer.style.height = card_layer.style.minHeight = _height || _cardcss.height;
-
-                        card_layer.style.width = card_layer.style.maxWidth =  _cardcss.width || _cardWidth;
+                        card_layer.style.width = card_layer.style.maxWidth = _cardcss.width || _cardWidth;
                         card_layer.style.height = card_layer.style.minHeight = _cardcss.height || _cardWidth;
 
-                        // TODO: find a better method to set the style 
+                        // TODO: find a better method to set the style
                         window.setTimeout(() => {
                             if (card.updateComplete) {
                                 card.updateComplete.then(() => this.styleCard(card, _cardSettings));
@@ -356,9 +362,10 @@ class CardsLayout extends HTMLElement {
         this.appendChild(view_layout);
     }
 
-    updateData(){
-        this.logInfo("updateData called")
-    }
+    /**
+     * update data
+     */
+    updateData() {}
 
     connectedCallback() {
         // this.logInfo("connectedCallback")
