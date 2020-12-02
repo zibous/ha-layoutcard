@@ -16,7 +16,7 @@ const settings = {
     distfolder: "./dist/cards-layout",
     releasefolder: "./release",
     hassfolder: "/Volumes/zeususdata/home/homeassistant/.homeassistant/www/community/cards-layout",
-    rb3afolder: "/Volumes/data-1/home/homeassistant/.homeassistant/www/community/cards-layout"
+    rb3afolder: "/Volumes/rb3a-data/home/homeassistant/.homeassistant/www/community/cards-layout"
 };
 
 // Command line option:

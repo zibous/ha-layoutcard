@@ -32,7 +32,7 @@ I'm still looking for help and would be happy if someone would get in touch to h
 
 1. Download the [latest release](https://github.com/zibous/ha-layoutcard/releases), unzip and copy the folder `cards-layout` into your `$HOME/homeassistant/.homeassistant/www/community/cards-layout` directory.
 <br />
-2. Add a reference to `chart-card-min.js` inside your `ui-lovelace.yaml` or at the top of the *raw config editor UI*:
+2. Add a reference to `cards-layout-min.js` inside your `ui-lovelace.yaml` or at the top of the *raw config editor UI*:
 
     ```yaml
     resources:

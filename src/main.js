@@ -2,7 +2,8 @@
 
 const appinfo = {
     name: "✓ custom:cards-layout",
-    version: "0.0.6"
+    version: "0.0.7",
+    assets: '/hacsfiles/ha-layoutcard/assets/'
 };
 console.info(
     "%c " + appinfo.name + "    %c ▪︎▪︎▪︎▪︎ Version: " + appinfo.version + " ▪︎▪︎▪︎▪︎ ",
@@ -10,6 +11,9 @@ console.info(
     "color:#2c3e50; background:#ecf0f1;display:inline-block;font-size:12px;font-weight:200;padding: 4px 0 4px 0"
 );
 
+const cssAttr = function(v){
+    return typeof v == "number" ? v + "px" : v
+}
 /**
  * custom cards layout
  * credits to https://github.com/ofekashery/vertical-stack-in-card
@@ -124,8 +128,9 @@ class CardsLayout extends HTMLElement {
         .cl-icon {
             vertical-align: bottom;
             padding: 0 8px 0 0;
+            color: var(--primary-text-color)
         }
-        .cl-card, ha-card.cl-card {
+        .cl-card, ha-card, ha-simplecard {
             margin: 0.5em !important;
             flex:none !important!;
             background: transparent !important;
@@ -150,6 +155,7 @@ class CardsLayout extends HTMLElement {
             text-overflow: ellipsis;
             width: 99%;
             margin: 1.2em 0 0.5em 0;
+            color: var(--primary-text-color)
         }
         .cl-card-layer {
             position: relative;
@@ -171,7 +177,7 @@ class CardsLayout extends HTMLElement {
             height: 0;
             clear: both;
         }
-        @media (max-width: 620px) {
+        @media (min-width: 481px) and (max-width: 767px) {
             div.cl-layout {
                 min-width: 95% !important;
                 max-width: 95% !important;
@@ -194,9 +200,33 @@ class CardsLayout extends HTMLElement {
                 margin: 0.3em 0 1em 0;
             }
         }
+        @media (min-width: 320px) and (max-width: 480px){
+            div.cl-layout {
+                min-width: 90% !important;
+                max-width: 90% !important;
+                margin: 0.5em !important;
+            }
+            .cl-card-layer {
+                float: none;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 1.2em 0 0.3em 0.3em;
+            }
+            .cl-card, ha-card.cl-card {
+                margin: 0.3em 0.5em !important;
+            }
+            div.cl-layout-col h1,
+            div.cl-layout-col h2 {
+                margin: 1em 0 0.3em 0;
+            }
+            div.cl-layout-col p {
+                margin: 0.3em 0 1em 0;
+            }
+        }
         `;
         // this.shadowRoot.appendChild(_style);
-        parent.appendChild(_style);
+        // parent.appendChild(_style);
+        this.appendChild(_style);
     }
 
     /**
@@ -213,7 +243,7 @@ class CardsLayout extends HTMLElement {
                     ele.style.cssText = settings.style.replaceAll("\n", "");
                 }
                 ele.style.margin = "0.5em";
-                this.provideHass(element);
+                this.provideHass(element); // !! important for update states
             } else {
                 let searchEles = element.shadowRoot.getElementById("root");
                 if (!searchEles) {
@@ -319,12 +349,13 @@ class CardsLayout extends HTMLElement {
                     view_col.append(view_descr);
                 }
 
+                // all for the columns settings
                 let _cardWidth = item.width || "100%";
                 let _cardHeight = item.height || "100%";
-
+                
                 let _cardcss = {
-                    width: typeof _cardWidth == "number" ? _cardWidth + "px" : _cardWidth,
-                    height: typeof _cardHeight == "number" ? _cardHeight + "px" : _cardHeight,
+                    width: cssAttr(_cardWidth),
+                    height: cssAttr(_cardHeight),
                     style: null
                 };
 
@@ -337,18 +368,22 @@ class CardsLayout extends HTMLElement {
                         const _cardSettings = _cards[index];
                         const card_layer = document.createElement("div");
                         card_layer.setAttribute("class", "cl-card-layer");
-
-                        card_layer.style.width = card_layer.style.maxWidth = _cardcss.width || _cardWidth;
-                        card_layer.style.height = card_layer.style.minHeight = _cardcss.height || _cardWidth;
-
-                        // TODO: find a better method to set the style
+                        // set the container size
+                        card_layer.style.width =  card_layer.style.maxWidth = _cardcss.width || _cardWidth;
+                        card_layer.style.height =  card_layer.style.maxHeight = _cardcss.height || _cardWidth;
+                        if(_cardSettings.maxwidth){
+                            card_layer.style.maxWidth = cssAttr(_cardSettings.maxwidth)
+                        }
+                        if(_cardSettings.maxheight){
+                            card_layer.style.maxheight = cssAttr(_cardSettings.maxheight)
+                        }
                         window.setTimeout(() => {
                             if (card.updateComplete) {
                                 card.updateComplete.then(() => this.styleCard(card, _cardSettings));
                             } else {
                                 this.styleCard(card, _cardSettings);
                             }
-                        }, 200);
+                        }, 500);
 
                         card_layer.append(card);
                         view_col.appendChild(card_layer);
