@@ -11,8 +11,9 @@
 
 const appinfo = {
     name: "✓ custom:cards-layout",
+    tag: "cards-layout",
     version: "0.0.7",
-    assets: '/hacsfiles/ha-layoutcard/assets/'
+    assets: "/hacsfiles/ha-layoutcard/assets/"
 };
 console.info(
     "%c " + appinfo.name + "    %c ▪︎▪︎▪︎▪︎ Version: " + appinfo.version + " ▪︎▪︎▪︎▪︎ ",
@@ -20,9 +21,9 @@ console.info(
     "color:#2c3e50; background:#ecf0f1;display:inline-block;font-size:12px;font-weight:200;padding: 4px 0 4px 0"
 );
 
-const cssAttr = function(v){
-    return typeof v == "number" ? v + "px" : v
-}
+const cssAttr = function (v) {
+    return typeof v == "number" ? v + "px" : v;
+};
 /**
  * custom cards layout
  * credits to https://github.com/ofekashery/vertical-stack-in-card
@@ -66,8 +67,15 @@ class CardsLayout extends HTMLElement {
         if (window.loadCardHelpers) {
             this.helpers = await window.loadCardHelpers();
         }
+
+        this.pagefooter =
+            this._config.footer ||
+            'Made with <span style="color: #e25555;">&hearts;</span> by ' +
+                appinfo.tag +
+                " &bull; version " +
+                appinfo.version + ".";
+
         this.renderCards();
-    
     }
 
     /**
@@ -338,6 +346,7 @@ class CardsLayout extends HTMLElement {
             view_descr.innerHTML = this._config.description;
             view_layout.append(view_descr);
         }
+        
         this._config.cards.forEach((items, r) => {
             const view_row = document.createElement("div");
             view_row.setAttribute("class", "cl-layout-row");
@@ -361,7 +370,7 @@ class CardsLayout extends HTMLElement {
                 // all for the columns settings
                 let _cardWidth = item.width || "100%";
                 let _cardHeight = item.height || "100%";
-                
+
                 let _cardcss = {
                     width: cssAttr(_cardWidth),
                     height: cssAttr(_cardHeight),
@@ -378,13 +387,13 @@ class CardsLayout extends HTMLElement {
                         const card_layer = document.createElement("div");
                         card_layer.setAttribute("class", "cl-card-layer");
                         // set the container size
-                        card_layer.style.width =  card_layer.style.maxWidth = _cardcss.width || _cardWidth;
-                        card_layer.style.height =  card_layer.style.maxHeight = _cardcss.height || _cardWidth;
-                        if(_cardSettings.maxwidth){
-                            card_layer.style.maxWidth = cssAttr(_cardSettings.maxwidth)
+                        card_layer.style.width = card_layer.style.maxWidth = _cardcss.width || _cardWidth;
+                        card_layer.style.height = card_layer.style.maxHeight = _cardcss.height || _cardWidth;
+                        if (_cardSettings.maxwidth) {
+                            card_layer.style.maxWidth = cssAttr(_cardSettings.maxwidth);
                         }
-                        if(_cardSettings.maxheight){
-                            card_layer.style.maxheight = cssAttr(_cardSettings.maxheight)
+                        if (_cardSettings.maxheight) {
+                            card_layer.style.maxheight = cssAttr(_cardSettings.maxheight);
                         }
                         window.setTimeout(() => {
                             if (card.updateComplete) {
@@ -403,6 +412,14 @@ class CardsLayout extends HTMLElement {
             });
             view_layout.append(view_row);
         });
+
+        if (this.pagefooter && this.pagefooter!='') {
+            const view_footer = document.createElement("div");
+            view_footer.style.cssText = "position:absolute;bottom:0,right:1em;z-index:800;font-weight:200;font-size:0.8em;width:100%;text-align:right";
+            view_footer.innerHTML = this.pagefooter;
+            view_layout.append(view_footer);
+        }
+
         this.appendChild(view_layout);
     }
 

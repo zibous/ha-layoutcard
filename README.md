@@ -53,6 +53,7 @@ I'm still looking for help and would be happy if someone would get in touch to h
 | row |  | **Required** | section for columns
 | col |  | **Required** | column for cards
 | entities | list | **Required** | List of cards
+| footer | string | **Optional** | shows the footer text on the page (bottom)
 
 ## Options layout row
 
