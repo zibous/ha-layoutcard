@@ -34,11 +34,12 @@ I'm still looking for help and would be happy if someone would get in touch to h
 <br />
 2. Add a reference to `cards-layout-min.js` inside your `ui-lovelace.yaml` or at the top of the *raw config editor UI*:
 
-    ```yaml
-    resources:
-      - url: /hacsfiles/cards-layout/cards-layout-min.js
-        type: module
-    ```
+   ```yaml
+      resources:
+        - url: /hacsfiles/cards-layout/cards-layout-min.js
+          type: module
+  ```
+
 <br>
 
 ## Options layout
