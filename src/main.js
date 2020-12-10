@@ -3,7 +3,7 @@
 const appinfo = {
     name: "✓ custom:cards-layout",
     tag: "cards-layout",
-    version: "0.0.7",
+    version: "0.0.8",
     assets: "/hacsfiles/ha-layoutcard/assets/"
 };
 console.info(
@@ -36,9 +36,9 @@ class CardsLayout extends HTMLElement {
 
     set hass(hass) {
         if (hass === undefined) return;
-
         this._hass = hass;
-
+        if(this.view_footer && this.pagefooter)
+            this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
         if (this.skipRender) return;
         this.skipRender = true;
     }
@@ -51,6 +51,7 @@ class CardsLayout extends HTMLElement {
         if (!config || !config.cards || !Array.isArray(config.cards)) {
             throw new Error("Card config incorrect");
         }
+        if (this.id) return;
         this._config = config;
         this.logenabled = this._config.logger || true;
         this.cards = [];
@@ -58,13 +59,13 @@ class CardsLayout extends HTMLElement {
         if (window.loadCardHelpers) {
             this.helpers = await window.loadCardHelpers();
         }
-
         this.pagefooter =
             this._config.footer ||
             'Made with <span style="color: #e25555;">&hearts;</span> by ' +
                 appinfo.tag +
                 " &bull; version " +
-                appinfo.version + ".";
+                appinfo.version +
+                ".";
 
         this.renderCards();
     }
@@ -282,22 +283,14 @@ class CardsLayout extends HTMLElement {
     }
 
     /**
-     * stage layer
-     * TODO: test for better render process ?
+     * provide hass for the element
+     * important for execute hass update for the included card
+     * @param {*} element 
      */
-    createStageLayer() {
-        this.stage_layer = document.createElement("div");
-        this.stage_layer.style.cssText = "display:none";
-        this.stage_layer.id = "stage";
-        return true;
-    }
-
     provideHass(element) {
         if (document.querySelector("hc-main")) return document.querySelector("hc-main").provideHass(element);
-
         if (document.querySelector("home-assistant"))
             return document.querySelector("home-assistant").provideHass(element);
-
         return undefined;
     }
 
@@ -337,7 +330,6 @@ class CardsLayout extends HTMLElement {
             view_descr.innerHTML = this._config.description;
             view_layout.append(view_descr);
         }
-        
         this._config.cards.forEach((items, r) => {
             const view_row = document.createElement("div");
             view_row.setAttribute("class", "cl-layout-row");
@@ -404,29 +396,16 @@ class CardsLayout extends HTMLElement {
             view_layout.append(view_row);
         });
 
-        if (this.pagefooter && this.pagefooter!='') {
-            const view_footer = document.createElement("div");
-            view_footer.style.cssText = "position:absolute;bottom:0,right:1em;z-index:800;font-weight:200;font-size:0.8em;width:100%;text-align:right";
-            view_footer.innerHTML = this.pagefooter;
-            view_layout.append(view_footer);
+        if (this.pagefooter && this.pagefooter != "") {
+            this.view_footer = document.createElement("div");
+            this.view_footer.style.cssText =
+                "position:absolute;bottom:0,right:1em;z-index:800;font-weight:200;font-size:0.8em;width:100%;text-align:right";
+            this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
+            view_layout.append(this.view_footer);
         }
 
         this.appendChild(view_layout);
     }
-
-    /**
-     * update data
-     */
-    updateData() {}
-
-    connectedCallback() {
-        // this.logInfo("connectedCallback")
-    }
-
-    disconnectedCallback() {
-        // this.logInfo("connectedCallback")
-    }
-
     /**
      * The height of your card. Home Assistant uses this to automatically
      * distribute all cards over the available columns.
