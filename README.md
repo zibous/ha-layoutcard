@@ -39,7 +39,7 @@ I'm still looking for help and would be happy if someone would get in touch to h
       resources:
         - url: /hacsfiles/cards-layout/cards-layout-min.js
           type: module
-  ```
+   ```
 
 <br>
 
