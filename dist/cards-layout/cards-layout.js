@@ -7,12 +7,20 @@
  * Author: Peter siebler
  */
 
+/** --------------------------------------------------------------------
+
+  Custom Layout Card 
+
+  parts based on https://github.com/ofekashery/vertical-stack-in-card
+
+/** -------------------------------------------------------------------*/
+
 "use strict";
 
 const appinfo = {
     name: "✓ custom:cards-layout",
     tag: "cards-layout",
-    version: "0.0.8",
+    version: "0.0.9",
     assets: "/hacsfiles/ha-layoutcard/assets/"
 };
 console.info(
@@ -29,27 +37,45 @@ const cssAttr = function (v) {
  * credits to https://github.com/ofekashery/vertical-stack-in-card
  */
 class CardsLayout extends HTMLElement {
-    // static get properties() {
-    //     return {
-    //         _config: {},
-    //         _hass: {}
-    //     };
-    // }
-
+    /**
+     * constructor cards layout
+     */
     constructor() {
+        // Always call super first in constructor
         super();
+        // Element functionality written in here
         this.skipRender = false;
         this.entities = [];
-        this.loginfo_enabled = true;
+        this.cards = [];
+        this.loginfo_enabled = false;
+        this.readyState = false;
+        this.allLoaded = false;
     }
 
+    /**
+     * show info
+     * @param {*} args
+     */
+    logInfo(...args) {
+        if (this.logenabled) console.info(new Date().toISOString(), appinfo.name, ...args);
+    }
+
+    /**
+     * hass event
+     */
     set hass(hass) {
         if (hass === undefined) return;
         this._hass = hass;
-        if(this.view_footer && this.pagefooter)
-            this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
-        if (this.skipRender) return;
-        this.skipRender = true;
+        if (this.readyState) {
+            if (this.allLoaded === false) {
+                this.logInfo(appinfo.tag, appinfo.version, "ready");
+                this.allLoaded = true;
+            }
+            if (this.view_footer && this.pagefooter)
+                this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
+            if (this.skipRender) return;
+            this.skipRender = true;
+        }
     }
 
     /**
@@ -61,10 +87,10 @@ class CardsLayout extends HTMLElement {
             throw new Error("Card config incorrect");
         }
         if (this.id) return;
-        this._config = config;
-        this.logenabled = this._config.logger || true;
-        this.cards = [];
-        this.id = Math.random().toString(36).substr(2, 9);
+        this.id = "LC" + Math.floor(Math.random() * 1000);
+        this._config = Object.assign({}, config);
+        // developer logger can be enabled by yaml
+        this.logenabled = this._config.logger || false;
         if (window.loadCardHelpers) {
             this.helpers = await window.loadCardHelpers();
         }
@@ -75,16 +101,148 @@ class CardsLayout extends HTMLElement {
                 " &bull; version " +
                 appinfo.version +
                 ".";
-
         this.renderCards();
     }
 
     /**
-     * show info
-     * @param {*} args
+     * add the card css tags
+     * TODO: export to css file, try to find a way to include...
+     * @param {*} parent
      */
-    logInfo(...args) {
-        if (this.logenabled) console.info(new Date().toISOString(), appinfo.name, ...args);
+    addCss(parent) {
+        const _style = document.createElement("style");
+        _style.setAttribute("id", "lc-" + this.id);
+        _style.textContent = `
+        .cl-layout {
+            position: relative;
+            margin: 0 auto;
+        }
+        .cl-layout-row {
+            width: 100%;
+            margin-bottom: 3em;
+        }
+        .cl-layout-col {
+            margin: 0 auto;
+            width: 100%;
+        }
+        .clearfix::before,
+        .clearfix::after {
+            content: " ";
+            display: table;
+        }
+        .clearfix::after {
+            content: ".";
+            visibility: hidden;
+            display: block;
+            height: 0;
+            clear: both;
+        }
+        .cl-icon {
+            vertical-align: bottom;
+            padding: 0 8px 0 0;
+            color: var(--primary-text-color);
+        }
+        .cl-layout h1,
+        .cl-layout-col h1,
+        .cl-layout-col h2 {
+            line-height: 1.2em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 99%;
+            margin: 1.2em 0 0.5em 0;
+            color: var(--primary-text-color)
+        }
+        .cl-layout-col p {
+            white-space: pre-wrap;
+        }
+        .cl-text {
+            margin: 0 0 2em 2em;
+        }
+        .cl-card-layer {
+            position: relative;
+            float: left;
+            margin: 0;
+        }
+        .cl-card, 
+        .ha-simplecard,
+        .cl-cde ha-card{
+            margin: 0.5em !important;
+            flex:none !important;
+            background: transparent !important;
+        }
+        .cl-layout-footer{
+            position:absolute;
+            bottom:0,
+            right:1em;
+            z-index:800;
+            font-weight:200;
+            font-size:0.8em;
+            width:100%;
+            text-align:right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            vertical-align: top;
+        }
+        @media (min-width: 481px) and (max-width: 767px) {
+            .cl-layout {
+                min-width: 95% !important;
+                max-width: 95% !important;
+                margin: 0.5em !important;
+            }
+            .cl-card-layer {
+                float: none;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 1.2em 0.3em;
+            }
+            .cl-card, ha-card.cl-card {
+                margin: 0.3em 0.5em !important;
+            }
+            .cl-layout-col h1,
+            .cl-layout-col h2 {
+                margin: 1em 0 0.3em 0;
+            }
+            .cl-layout-col p {
+                margin: 0.3em 0 1em 0;
+            }
+            .cl-layout-footer{
+                right:0.5em;
+                font-size:0.75em;
+            }
+        }
+        @media (min-width: 320px) and (max-width: 480px){
+            .cl-layout {
+                min-width: 90% !important;
+                max-width: 90% !important;
+                margin: 0.5em !important;
+            }
+            .cl-card-layer {
+                float: none;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 1.2em 0 0.3em 0.3em;
+            }
+            
+            .cl-card, ha-card.cl-card {
+                margin: 0.3em 0.5em !important;
+            }
+            .cl-layout-col h1,
+            .cl-layout-col h2 {
+                margin: 1em 0 0.3em 0;
+            }
+            .cl-layout-col p {
+                margin: 0.3em 0 1em 0;
+            }
+            .cl-layout-footer{
+                right:0.3em;
+                font-size:0.65em;
+            }
+        }
+        `;
+        this.appendChild(_style);
     }
 
     /**
@@ -130,123 +288,7 @@ class CardsLayout extends HTMLElement {
         return element;
     }
 
-    /**
-     * add the card css tags
-     * TODO: export to css file, try to find a way to include...
-     * @param {*} parent
-     */
-    addCss(parent) {
-        const _style = document.createElement("style");
-        _style.setAttribute("id", "lc-" + this.id);
-        _style.textContent = `
-        div.cl-layout {
-            position: relative;
-            margin: 0 auto;
-        }
-        .cl-icon {
-            vertical-align: bottom;
-            padding: 0 8px 0 0;
-            color: var(--primary-text-color)
-        }
-        .cl-card, ha-card, ha-simplecard {
-            margin: 0.5em !important;
-            flex:none !important!;
-            background: transparent !important;
-        }
-        div.cl-layout-row {
-            width: 100%;
-            margin-bottom: 3em;
-        }
-        div.cl-layout-col {
-            margin: 0 auto;
-            width: 100%;
-        }
-        div.cl-layout-col p {
-            white-space: pre-wrap;
-        }
-        div.cl-layout h1,
-        div.cl-layout-col h1,
-        div.cl-layout-col h2 {
-            line-height: 1.2em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 99%;
-            margin: 1.2em 0 0.5em 0;
-            color: var(--primary-text-color)
-        }
-        .cl-card-layer {
-            position: relative;
-            float: left;
-            margin: 0;
-        }
-        .cl-text {
-            margin: 0 0 2em 2em;
-        }
-        .clearfix::before,
-        .clearfix::after {
-            content: " ";
-            display: table;
-        }
-        .clearfix::after {
-            content: ".";
-            visibility: hidden;
-            display: block;
-            height: 0;
-            clear: both;
-        }
-        @media (min-width: 481px) and (max-width: 767px) {
-            div.cl-layout {
-                min-width: 95% !important;
-                max-width: 95% !important;
-                margin: 0.5em !important;
-            }
-            .cl-card-layer {
-                float: none;
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 1.2em 0.3em;
-            }
-            .cl-card, ha-card.cl-card {
-                margin: 0.3em 0.5em !important;
-            }
-            div.cl-layout-col h1,
-            div.cl-layout-col h2 {
-                margin: 1em 0 0.3em 0;
-            }
-            div.cl-layout-col p {
-                margin: 0.3em 0 1em 0;
-            }
-        }
-        @media (min-width: 320px) and (max-width: 480px){
-            div.cl-layout {
-                min-width: 90% !important;
-                max-width: 90% !important;
-                margin: 0.5em !important;
-            }
-            .cl-card-layer {
-                float: none;
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 1.2em 0 0.3em 0.3em;
-            }
-            .cl-card, ha-card.cl-card {
-                margin: 0.3em 0.5em !important;
-            }
-            div.cl-layout-col h1,
-            div.cl-layout-col h2 {
-                margin: 1em 0 0.3em 0;
-            }
-            div.cl-layout-col p {
-                margin: 0.3em 0 1em 0;
-            }
-        }
-        `;
-        // this.shadowRoot.appendChild(_style);
-        // parent.appendChild(_style);
-        this.appendChild(_style);
-    }
-
+    
     /**
      * set the style for the selected card
      * @param {*} element
@@ -262,12 +304,13 @@ class CardsLayout extends HTMLElement {
                 }
                 ele.style.margin = "0.5em";
                 this.provideHass(element); // !! important for update states
+                return true;
             } else {
                 let searchEles = element.shadowRoot.getElementById("root");
                 if (!searchEles) {
                     searchEles = element.shadowRoot.getElementById("card");
                 }
-                if (!searchEles) return;
+                if (!searchEles) return false;
                 searchEles = searchEles.childNodes;
                 for (let i = 0; i < searchEles.length; i++) {
                     if (searchEles[i].style) {
@@ -275,6 +318,7 @@ class CardsLayout extends HTMLElement {
                     }
                     this.styleCard(searchEles[i]);
                 }
+                return true;
             }
         } else {
             if (typeof element.querySelector === "function" && element.querySelector("ha-card")) {
@@ -282,19 +326,21 @@ class CardsLayout extends HTMLElement {
                 ele.classList.add("cl-card");
             }
             let searchEles = element.childNodes;
+            if (!searchEles) return false;
             for (let i = 0; i < searchEles.length; i++) {
                 if (searchEles[i] && searchEles[i].style) {
                     searchEles[i].classList.add("cl-card");
                 }
                 this.styleCard(searchEles[i]);
             }
+            return true;
         }
     }
 
     /**
      * provide hass for the element
      * important for execute hass update for the included card
-     * @param {*} element 
+     * @param {*} element
      */
     provideHass(element) {
         if (document.querySelector("hc-main")) return document.querySelector("hc-main").provideHass(element);
@@ -387,13 +433,18 @@ class CardsLayout extends HTMLElement {
                         if (_cardSettings.maxheight) {
                             card_layer.style.maxheight = cssAttr(_cardSettings.maxheight);
                         }
+                        card.classList.add("cl-cde");
+                        // style the card
+                        // TODO; how to handle slow networks ??
+                        
                         window.setTimeout(() => {
                             if (card.updateComplete) {
                                 card.updateComplete.then(() => this.styleCard(card, _cardSettings));
                             } else {
+                                // ERROR: no hass, no style !!!!
                                 this.styleCard(card, _cardSettings);
                             }
-                        }, 500);
+                        }, 800);
 
                         card_layer.append(card);
                         view_col.appendChild(card_layer);
@@ -407,14 +458,28 @@ class CardsLayout extends HTMLElement {
 
         if (this.pagefooter && this.pagefooter != "") {
             this.view_footer = document.createElement("div");
-            this.view_footer.style.cssText =
-                "position:absolute;bottom:0,right:1em;z-index:800;font-weight:200;font-size:0.8em;width:100%;text-align:right";
+            this.view_footer.setAttribute("class", "cl-layout-footer");
             this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
             view_layout.append(this.view_footer);
         }
 
         this.appendChild(view_layout);
     }
+
+    /**
+     * The connectedCallback() runs when the element is added to the DOM
+     */
+    connectedCallback() {
+        this.readyState = true;
+    }
+
+    /**
+     * the disconnectedCallback() runs when the element is either removed from the DOM
+     */
+    disconnectedCallback() {
+        this.readyState = false;
+    }
+
     /**
      * The height of your card. Home Assistant uses this to automatically
      * distribute all cards over the available columns.

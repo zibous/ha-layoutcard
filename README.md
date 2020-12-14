@@ -1,6 +1,6 @@
 # Homeassitant Layout Card
 
-> DEVELOPER PREVIEW VERSION NOT FINAL
+> DEVELOPER PREVIEW VERSION NOT FINAL `Version 0.0.9`
 I'm still looking for help and would be happy if someone would get in touch to help me complete and improve the cards-layout.
 
 
@@ -56,6 +56,8 @@ I'm still looking for help and would be happy if someone would get in touch to h
 | col |  | **Required** | column for cards
 | entities | list | **Required** | List of cards
 | footer | string | **Optional** | shows the footer text on the page (bottom)
+| logger | boolean | **Optional** | If true, show developer log
+
 
 ## Options layout row
 
@@ -173,7 +175,7 @@ views:
 ## TODO
 - better css handling (load css once not per card)
 - initialize - render cards to stage, re-assign to root
-- how to handle end devices with low bandwidth ?
+- how to handle end devices with low bandwidth, currently shows error-hui card when loading ?
 - ~~how to call hass and config for a custom:card (update data custom:card do not work !) ?~~  -->  this.provideHass(element);
 
 ## Helper
