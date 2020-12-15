@@ -52,8 +52,9 @@ I'm still looking for help and would be happy if someone would get in touch to h
 | icon | string | **Optional** | Card title icon
 | description | string | **Optional** | Card section text
 | width | number, string | **Required** | max width card row or column
-| row |  | **Required** | section for columns
-| col |  | **Required** | column for cards
+| rows | -- | **Required** | section for row
+| row | -- | **Required** | section for columns
+| columns | --  | **Required** | columns container for cards
 | entities | list | **Required** | List of cards
 | footer | string | **Optional** | shows the footer text on the page (bottom)
 | logger | boolean | **Optional** | If true, show developer log
@@ -63,13 +64,13 @@ I'm still looking for help and would be happy if someone would get in touch to h
 
 | Name | Type | Default | Description
 | ---- | ---- | ------- | -----------
-| row |  | **Required** | section for columns
+| row | -- | **Required** | section for columns
 
 ## Options layout col
 
 | Name | Type | Default | Description
 | ---- | ---- | ------- | -----------
-| col |  | **Required** | column for cards
+| columns | --  | **Required** | columns container for cards
 | title | string | **Optional** | title
 | description | string | **Optional** | Card section text
 | width | number, string | **Required** | max width card row or column
@@ -109,9 +110,9 @@ views:
         icon: 'mdi:home'
         description: Page description
         width: 80%
-        cards:
+        rows:
           - row:
-              - col: null
+              - columns: null
                 width: 100%
                 title: Section 1
                 description: Description Section 1 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -121,7 +122,7 @@ views:
                     image: >-
                       https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
           - row:
-              - col: null
+              - columns: null
                 width: 50%
                 title: Section 2
                 description: Description Section 2 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -135,7 +136,7 @@ views:
                     image: >-
                       https://images.unsplash.com/photo-1546551613-09c2f83e1ede?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
           - row:
-              - col: null
+              - columns: null
                 width: 50%
                 title: Section 3
                 description: Description Section 3 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -157,7 +158,7 @@ views:
                     image: >-
                       https://images.unsplash.com/photo-1593853885764-b1174d704401?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80      
           - row:
-              - col: null
+              - columns: null
                 width: 100%
                 title: Section 4
                 description: Description Section 4 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.

@@ -74,7 +74,7 @@ class CardsLayout extends HTMLElement {
      * @param {*} config
      */
     async setConfig(config) {
-        if (!config || !config.cards || !Array.isArray(config.cards)) {
+        if (!config || !config.rows || !Array.isArray(config.rows)) {
             throw new Error("Card config incorrect");
         }
         if (this.id) return;
@@ -274,12 +274,13 @@ class CardsLayout extends HTMLElement {
             tag = `hui-${tag}-card`;
         }
         const element = createThing(tag, cardConfig);
+        element.style.margin = "0.5em";
+        element.style.display = "block";
         element.hass = this._hass;
         this.cards.push(element);
         return element;
     }
 
-    
     /**
      * set the style for the selected card
      * @param {*} element
@@ -293,7 +294,7 @@ class CardsLayout extends HTMLElement {
                 if (settings.style) {
                     ele.style.cssText = settings.style.replaceAll("\n", "");
                 }
-                ele.style.margin = "0.5em";
+                //ele.style.margin = "0.5em";
                 this.provideHass(element); // !! important for update states
                 return true;
             } else {
@@ -347,7 +348,7 @@ class CardsLayout extends HTMLElement {
      *       // use stage for first render ?
      */
     async renderCards() {
-        // container for all cards
+        // page container for all cards
         const view_layout = document.createElement("div");
         view_layout.setAttribute("class", "cl-layout");
         view_layout.setAttribute("id", "cl-" + this.id);
@@ -355,6 +356,8 @@ class CardsLayout extends HTMLElement {
         if (this._config.width) {
             view_layout.style.width = view_layout.style.minWidth = this._config.width;
         }
+        view_layout.style.display = "none";
+        // page icon and title (optional)
         if (this._config.title) {
             const view_title = document.createElement("h1");
             if (this._config.icon) {
@@ -371,25 +374,32 @@ class CardsLayout extends HTMLElement {
             }
             view_layout.append(view_title);
         }
+
+        // page description (optinal)
         if (this._config.description) {
             const view_descr = document.createElement("p");
             view_descr.innerHTML = this._config.description;
             view_layout.append(view_descr);
         }
-        this._config.cards.forEach((items, r) => {
+
+        // add all cards
+        this._config.rows.forEach((items, r) => {
+            // row container ------------------------------
             const view_row = document.createElement("div");
             view_row.setAttribute("class", "cl-layout-row");
 
             items.row.forEach((item, c) => {
+                // columns container -------------------------
                 const view_col = document.createElement("div");
-
                 view_col.setAttribute("class", "cl-layout-col clearfix");
 
+                // columns container title (optional)
                 if (item.title) {
                     const view_title = document.createElement("h2");
                     view_title.innerHTML = item.title;
                     view_col.append(view_title);
                 }
+                // columns container description (optional)
                 if (item.description) {
                     const view_descr = document.createElement("p");
                     view_descr.innerHTML = item.description;
@@ -399,19 +409,18 @@ class CardsLayout extends HTMLElement {
                 // all for the columns settings
                 let _cardWidth = item.width || "100%";
                 let _cardHeight = item.height || "100%";
-
                 let _cardcss = {
                     width: cssAttr(_cardWidth),
                     height: cssAttr(_cardHeight),
                     style: null
                 };
 
+                // each card is located in one column
                 const _cards = item.entities;
                 const promises = _cards.map((cardConfig) => this.createCardElement(cardConfig));
-
                 Promise.all(promises).then((cards) => {
                     cards.forEach((card, index) => {
-                        // container for the card
+                        // col: container for the card -----------------
                         const _cardSettings = _cards[index];
                         const card_layer = document.createElement("div");
                         card_layer.setAttribute("class", "cl-card-layer");
@@ -425,9 +434,10 @@ class CardsLayout extends HTMLElement {
                             card_layer.style.maxheight = cssAttr(_cardSettings.maxheight);
                         }
                         card.classList.add("cl-cde");
+
                         // style the card
                         // TODO; how to handle slow networks ??
-                        
+
                         window.setTimeout(() => {
                             if (card.updateComplete) {
                                 card.updateComplete.then(() => this.styleCard(card, _cardSettings));
@@ -453,8 +463,10 @@ class CardsLayout extends HTMLElement {
             this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
             view_layout.append(this.view_footer);
         }
-
         this.appendChild(view_layout);
+        setTimeout(() => {
+            view_layout.style.display = "block";
+        }, 300);
     }
 
     /**

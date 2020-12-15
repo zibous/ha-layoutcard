@@ -7,9 +7,9 @@ views:
         icon: 'mdi:tape-measure'
         description: Hier werden alle Daten in graphischer Form dargestellt
         width: 80%
-        cards:
+        rows:
           - row:
-              - col: null
+              - columns: null
                 width: 100%
                 title: Testcase Picture
                 description: Darstellung mit einer picture-glance card.
@@ -20,7 +20,7 @@ views:
                     entities:
                       - sun.sun
           - row:
-              - col: null
+              - columns: null
                 width: 50%
                 height: 320
                 title: Testcase mit lovelace cards
@@ -111,7 +111,7 @@ views:
                         name: Licht
                         y_axis: secondary
           - row:
-              - col: null
+              - columns: null
                 entities:
                   - type: 'custom:simple-card'
                     title: Anzeige von Buttons mit Status
@@ -121,7 +121,7 @@ views:
                       - sensor.gasuhr_status
                       - sensor.gas_verbrauch_m3
           - row:
-              - col: null
+              - columns: null
                 title: Status Informationen
                 description: Kleine Karten (homekit-card)
                 entities:
