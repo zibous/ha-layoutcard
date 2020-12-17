@@ -1,6 +1,6 @@
 # Homeassitant Layout Card
 
-> DEVELOPER PREVIEW VERSION NOT FINAL `Version 0.0.9`
+> DEVELOPER PREVIEW VERSION NOT FINAL `Version 0.1.0`
 I'm still looking for help and would be happy if someone would get in touch to help me complete and improve the cards-layout.
 
 
@@ -52,12 +52,13 @@ I'm still looking for help and would be happy if someone would get in touch to h
 | icon | string | **Optional** | Card title icon
 | description | string | **Optional** | Card section text
 | width | number, string | **Required** | max width card row or column
+| locale | string | **Optional** | formats the numbers according to the locale and formatting options and set the data string with a language sensitive representation of the date portion of the date
 | rows | -- | **Required** | section for row
 | row | -- | **Required** | section for columns
 | columns | --  | **Required** | columns container for cards
 | entities | list | **Required** | List of cards
 | footer | string | **Optional** | shows the footer text on the page (bottom)
-| logger | boolean | **Optional** | If true, show developer log
+| logger | boolean | **Optional** | Logs debug information in the console of your browser. Useful when you want to investigate or register an issue.
 
 
 ## Options layout row

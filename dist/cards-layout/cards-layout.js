@@ -12,6 +12,7 @@
   Custom Layout Card 
 
   parts based on https://github.com/ofekashery/vertical-stack-in-card
+  credits to: https://github.com/ofekashery
 
 /** -------------------------------------------------------------------*/
 
@@ -20,7 +21,7 @@
 const appinfo = {
     name: "✓ custom:cards-layout",
     tag: "cards-layout",
-    version: "0.0.9",
+    version: "0.1.0",
     assets: "/hacsfiles/ha-layoutcard/assets/"
 };
 console.info(
@@ -43,6 +44,9 @@ class CardsLayout extends HTMLElement {
     constructor() {
         // Always call super first in constructor
         super();
+        this.attachShadow({
+            mode: "open"
+        });
         // Element functionality written in here
         this.skipRender = false;
         this.entities = [];
@@ -72,7 +76,7 @@ class CardsLayout extends HTMLElement {
                 this.allLoaded = true;
             }
             if (this.view_footer && this.pagefooter)
-                this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
+                this.view_footer.innerHTML = this.pagefooter + " ⟲ " + this.localDatetime();
             if (this.skipRender) return;
             this.skipRender = true;
         }
@@ -86,11 +90,14 @@ class CardsLayout extends HTMLElement {
         if (!config || !config.rows || !Array.isArray(config.rows)) {
             throw new Error("Card config incorrect");
         }
+        if (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
         if (this.id) return;
+        this.addCss();
         this.id = "LC" + Math.floor(Math.random() * 1000);
         this._config = Object.assign({}, config);
         // developer logger can be enabled by yaml
         this.logenabled = this._config.logger || false;
+        this._config.locale = this._config.locale || (navigator.language || navigator.userLanguage || "en-GB")
         if (window.loadCardHelpers) {
             this.helpers = await window.loadCardHelpers();
         }
@@ -109,19 +116,21 @@ class CardsLayout extends HTMLElement {
      * TODO: export to css file, try to find a way to include...
      * @param {*} parent
      */
-    addCss(parent) {
+    addCss() {
         const _style = document.createElement("style");
         _style.setAttribute("id", "lc-" + this.id);
         _style.textContent = `
         .cl-layout {
             position: relative;
+            height:100%;
+            width:100%;
             margin: 0 auto;
         }
         .cl-layout-row {
             width: 100%;
             margin-bottom: 3em;
         }
-        .cl-layout-col {
+        .cl-layout-columns {
             margin: 0 auto;
             width: 100%;
         }
@@ -143,8 +152,8 @@ class CardsLayout extends HTMLElement {
             color: var(--primary-text-color);
         }
         .cl-layout h1,
-        .cl-layout-col h1,
-        .cl-layout-col h2 {
+        .cl-layout-columns h1,
+        .cl-layout-columns h2 {
             line-height: 1.2em;
             white-space: nowrap;
             overflow: hidden;
@@ -153,7 +162,7 @@ class CardsLayout extends HTMLElement {
             margin: 1.2em 0 0.5em 0;
             color: var(--primary-text-color)
         }
-        .cl-layout-col p {
+        .cl-layout-columns p {
             white-space: pre-wrap;
         }
         .cl-text {
@@ -162,18 +171,17 @@ class CardsLayout extends HTMLElement {
         .cl-card-layer {
             position: relative;
             float: left;
-            margin: 0;
+            margin-bottom: 1.0em;
         }
-        .cl-card, 
-        .ha-simplecard,
-        .cl-cde ha-card{
-            margin: 0.5em !important;
-            flex:none !important;
-            background: transparent !important;
+        .cl-cde{
+            margin-right: 2em;
+            display: block;
+            width: auto;
+            height: 95%;
         }
         .cl-layout-footer{
             position:absolute;
-            bottom:0,
+            bottom:0;
             right:1em;
             z-index:800;
             font-weight:200;
@@ -188,65 +196,61 @@ class CardsLayout extends HTMLElement {
         }
         @media (min-width: 481px) and (max-width: 767px) {
             .cl-layout {
+                width: 95% !important;
                 min-width: 95% !important;
                 max-width: 95% !important;
-                margin: 0.5em !important;
             }
             .cl-card-layer {
                 float: none;
                 width: 100% !important;
                 max-width: 100% !important;
-                margin: 1.2em 0.3em;
+                margin-left: 0.8em !important;
             }
-            .cl-card, ha-card.cl-card {
-                margin: 0.3em 0.5em !important;
-            }
-            .cl-layout-col h1,
-            .cl-layout-col h2 {
+            .cl-layout-columns h1,
+            .cl-layout-columns h2 {
                 margin: 1em 0 0.3em 0;
             }
-            .cl-layout-col p {
+            .cl-layout-columns p {
                 margin: 0.3em 0 1em 0;
             }
             .cl-layout-footer{
                 right:0.5em;
+                text-align:center;
                 font-size:0.75em;
             }
         }
         @media (min-width: 320px) and (max-width: 480px){
             .cl-layout {
-                min-width: 90% !important;
-                max-width: 90% !important;
-                margin: 0.5em !important;
+                width: 95% !important;
+                min-width: 95% !important;
+                max-width: 95% !important;
             }
             .cl-card-layer {
                 float: none;
                 width: 100% !important;
                 max-width: 100% !important;
-                margin: 1.2em 0 0.3em 0.3em;
+                margin-left: 0.8em !important;
             }
-            
-            .cl-card, ha-card.cl-card {
-                margin: 0.3em 0.5em !important;
-            }
-            .cl-layout-col h1,
-            .cl-layout-col h2 {
+            .cl-layout-columns h1,
+            .cl-layout-columns h2 {
                 margin: 1em 0 0.3em 0;
             }
-            .cl-layout-col p {
+            .cl-layout-columns p {
                 margin: 0.3em 0 1em 0;
             }
             .cl-layout-footer{
                 right:0.3em;
+                text-align:center;
                 font-size:0.65em;
             }
         }
         `;
-        this.appendChild(_style);
+        this.shadowRoot.appendChild(_style);
     }
 
     /**
      * create the card element
+     * credits to: https://github.com/ofekashery
      * @param {*} cardConfig
      */
     async createCardElement(cardConfig) {
@@ -275,16 +279,16 @@ class CardsLayout extends HTMLElement {
             return element;
         };
         let tag = cardConfig.type;
+        let _bResize = true;
         if (tag.startsWith("divider")) {
             tag = `hui-divider-row`;
         } else if (tag.startsWith("custom:")) {
             tag = tag.substr("custom:".length);
+            _bResize = false;
         } else {
             tag = `hui-${tag}-card`;
         }
         const element = createThing(tag, cardConfig);
-        element.style.margin = "0.5em";
-        element.style.display = "block";
         element.hass = this._hass;
         this.cards.push(element);
         return element;
@@ -303,7 +307,6 @@ class CardsLayout extends HTMLElement {
                 if (settings.style) {
                     ele.style.cssText = settings.style.replaceAll("\n", "");
                 }
-                //ele.style.margin = "0.5em";
                 this.provideHass(element); // !! important for update states
                 return true;
             } else {
@@ -350,6 +353,17 @@ class CardsLayout extends HTMLElement {
         return undefined;
     }
 
+    localDatetime() {
+        const date = new Date();
+        return new Intl.DateTimeFormat(this._config.locale, {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric"
+        }).format(date);
+    }
     /**
      * render the card elements
      *
@@ -361,11 +375,11 @@ class CardsLayout extends HTMLElement {
         const view_layout = document.createElement("div");
         view_layout.setAttribute("class", "cl-layout");
         view_layout.setAttribute("id", "cl-" + this.id);
-        this.addCss(view_layout);
+        
         if (this._config.width) {
             view_layout.style.width = view_layout.style.minWidth = this._config.width;
         }
-        view_layout.style.display = "none";
+        //view_layout.style.display = "none";
         // page icon and title (optional)
         if (this._config.title) {
             const view_title = document.createElement("h1");
@@ -400,7 +414,7 @@ class CardsLayout extends HTMLElement {
             items.row.forEach((item, c) => {
                 // columns container -------------------------
                 const view_col = document.createElement("div");
-                view_col.setAttribute("class", "cl-layout-col clearfix");
+                view_col.setAttribute("class", "cl-layout-columns clearfix");
 
                 // columns container title (optional)
                 if (item.title) {
@@ -469,13 +483,10 @@ class CardsLayout extends HTMLElement {
         if (this.pagefooter && this.pagefooter != "") {
             this.view_footer = document.createElement("div");
             this.view_footer.setAttribute("class", "cl-layout-footer");
-            this.view_footer.innerHTML = this.pagefooter + " ⟲ " + new Date().toISOString();
+            this.view_footer.innerHTML = this.pagefooter + " ⟲ " + this.localDatetime()
             view_layout.append(this.view_footer);
         }
-        this.appendChild(view_layout);
-        setTimeout(() => {
-            view_layout.style.display = "block";
-        }, 200);
+        this.shadowRoot.appendChild(view_layout);
     }
 
     /**
@@ -508,17 +519,17 @@ customElements.define("cards-layout", CardsLayout);
   Cards Layout structure
   
   - type: 'custom: cards-layout'
-    cards:
+    rows:
       - row
-        - col
+        - columns
           - entities:
             - card
             - card
-        - col
+        - columns
           - entities:
             - card
       - row
-        - col
+        - columns
           ....
   
 /** -------------------------------------------------------------------*/
