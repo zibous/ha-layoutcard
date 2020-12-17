@@ -11,6 +11,7 @@ const settings = {
     files: ["./src/main.js"],
     libs: [],
     outfile: "cards-layout.js",
+    releasefile: "cards-layout.zip",
     libsfile: "",
     lessfiles: "./src/chartjs.less",
     distfolder: "./dist/cards-layout",
@@ -85,7 +86,7 @@ gulp.task("deploy", function () {
 gulp.task("release", function () {
     return gulp
         .src([settings.distfolder + "/**/*"])
-        .pipe(zip("chart-card.zip"))
+        .pipe(zip(settings.releasefile))
         .pipe(gulp.dest(settings.releasefolder))
         .on("error", onError);
 });
