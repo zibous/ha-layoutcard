@@ -3,11 +3,25 @@ views:
     panel: true
     cards:
       - type: 'custom:cards-layout'
-        title: Page Title
-        icon: 'mdi:home'
-        description: Page description
-        width: 80%
-        rows:
+        header:
+          title: My House
+          icon: 'mdi:home'
+          style: >-
+              background-image: url('/hacsfiles/cards-layout/assets/ui-ux.png');
+              background-color:rgb(106, 115, 126);
+              background-position: calc(100% - 20px) calc(100%); 
+          page:
+            title: Page Title
+            icon: 'mdi:view-agenda'
+            description: >-
+                  Description Section 1 Lorem ipsum dolor sit amet, consetetur
+                  sadipscing elitr
+            style: |
+               color: #FFFFFF;
+               background: #bdc3c7; 
+               background: linear-gradient(to top, #bdc3c7, #2c3e50);")
+            width: 80%
+        content:
           - row:
               - columns: null
                 width: 100%

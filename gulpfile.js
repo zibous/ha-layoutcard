@@ -10,6 +10,7 @@ const zip = require("gulp-zip");
 const settings = {
     files: ["./src/main.js"],
     libs: [],
+    assetsfolder: "assets",
     outfile: "cards-layout.js",
     releasefile: "cards-layout.zip",
     libsfile: "",
@@ -61,7 +62,7 @@ function onWarning(error) {
  * clean up distributen and release
  */
 gulp.task("cleanup", function () {
-    return del([settings.distfolder + "/*.*", settings.releasefolder + "/*.zip"]);
+    return del([settings.distfolder + "/**/*", settings.releasefolder + "/*.zip"]);
 });
 
 /**
@@ -71,7 +72,7 @@ gulp.task("cleanup", function () {
 gulp.task("deploy", function () {
     if (settings.hassfolder) {
         return gulp
-            .src(settings.distfolder + "/*.*")
+            .src(settings.distfolder + "/**/*")
             .pipe(gulp.dest(settings.hassfolder))
             .pipe(gulp.dest(settings.rb3afolder))
             .on("error", onError);
@@ -112,13 +113,21 @@ gulp.task("build-css", function () {
         .pipe(gulp.dest(settings.distfolder))
         .on("error", onError);
 });
+
+gulp.task("build-assets", function () {
+    return gulp
+        .src(["./src/" + settings.assetsfolder + "/**/*"])
+        .pipe(gulp.dest(settings.distfolder + "/assets"))
+        .on("error", onError);
+});
+
 /**
  * build the custom card
  */
 gulp.task("build", function () {
     return gulp
         .src(settings.files)
-        .pipe(plumber())
+        //.pipe(plumber())
         .pipe(concat(settings.outfile))
         .pipe(minify())
         .pipe( 
@@ -142,7 +151,7 @@ gulp.task("build", function () {
 gulp.task(
 	"release",
 	gulp.series(
-		["cleanup", "build","release"],
+		["cleanup", "build","build-assets","release"],
 		function (done) {
 			// task code here
 			done();
@@ -157,7 +166,7 @@ gulp.task(
 gulp.task(
 	"default",
 	gulp.series(
-		["cleanup", "build","release", "deploy"],
+		["cleanup", "build","build-assets","release", "deploy"],
 		function (done) {
 			// task code here
 			done();
