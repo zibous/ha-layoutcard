@@ -15,21 +15,28 @@
   credits to: https://github.com/ofekashery
 
 /** -------------------------------------------------------------------*/
-
 "use strict"
 
+// all about the application
 const appinfo = {
     name: "✓ custom:cards-layout",
-    tag: "cards-layout",
+    app: "cards-layout",
     version: "0.1.1",
-    assets: "/hacsfiles/cards-layout/assets/"
+    assets: "/hacsfiles/cards-layout/assets/",
+    github: "https://github.com/zibous/ha-layoutcard"
 }
+
+// render the app-info for this custom card
 console.info(
     "%c " + appinfo.name + "    %c ▪︎▪︎▪︎▪︎ Version: " + appinfo.version + " ▪︎▪︎▪︎▪︎ ",
     "color:#FFFFFF; background:#3498db;display:inline-block;font-size:12px;font-weight:200;padding: 4px 0 4px 0",
     "color:#2c3e50; background:#ecf0f1;display:inline-block;font-size:12px;font-weight:200;padding: 4px 0 4px 0"
 )
 
+/**
+ * helper for css attribute
+ * @param {*} v 
+ */
 const cssAttr = function (v) {
     return typeof v == "number" ? v + "px" : v
 }
@@ -81,15 +88,15 @@ class CardsLayout extends HTMLElement {
 
         if (this.readyState) {
             if (this.allLoaded === false) {
-                this.logInfo(appinfo.tag, appinfo.version, "ready")
+                this.logInfo(appinfo.app, appinfo.version, "ready")
                 this.allLoaded = true
             }
             if (this.view_footer && this.pagefooter)
                 this.view_footer.innerHTML = this.pagefooter + " ⟲ " + this.localDatetime()
 
             if (this.skipRender) return
-
             this.skipRender = true
+            
         }
     }
 
@@ -117,7 +124,7 @@ class CardsLayout extends HTMLElement {
         this.pagefooter =
             this._config.footer ||
             'Made with <span style="color: #e25555;">&hearts;</span> by ' +
-                appinfo.tag +
+                appinfo.app +
                 " &bull; version " +
                 appinfo.version +
                 "."
@@ -603,6 +610,7 @@ class CardsLayout extends HTMLElement {
             view_row.setAttribute("class", "cl-layout-row")
 
             items.row.forEach((item, c) => {
+
                 // columns container -------------------------
                 const view_col = document.createElement("div")
                 view_col.setAttribute("class", "cl-layout-columns clearfix")
@@ -629,7 +637,9 @@ class CardsLayout extends HTMLElement {
                     style: null
                 }
 
+                // ----------------------------------
                 // each card is located in one column
+                // ----------------------------------
                 const _cards = item.entities
                 const _cardsCount = item.entities.length
                 const promises = _cards.map((cardConfig) => this.createCardElement(cardConfig))
@@ -650,12 +660,11 @@ class CardsLayout extends HTMLElement {
                             card_layer.style.maxheight = cssAttr(_cardSettings.maxheight)
                         }
                         card.classList.add("cl-cde")
-
                         window.setTimeout(() => {
                             if (card.updateComplete) {
                                 card.updateComplete.then(() => this.styleCard(card, _cardSettings))
                             } else {
-                                // ERROR: no hass, no style !!!!
+                                // TODO: how to handle ERROR: no hass, no style !!!!
                                 this.styleCard(card, _cardSettings)
                             }
                         }, 800)
@@ -664,9 +673,9 @@ class CardsLayout extends HTMLElement {
                         view_col.appendChild(card_layer)
                     })
                 })
-
                 view_row.append(view_col)
             })
+
             this.view_layout.append(view_row)
         })
 
