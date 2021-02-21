@@ -1,0 +1,248 @@
+views:
+  - title: Übersicht Energie
+    id: powerchart
+    panel: true
+    path: power
+    cards:
+      - type: 'custom:cards-layout'
+        toolbar:
+          backgroundcolor: '#1678C9'
+          iconcolor: '#FFFFFF'
+          visible: true
+        header:
+          title: Energieverbrauch
+          icon: 'mdi:flash'
+          iconcolor: '#FFFFFF'
+          style: >-
+            background-image:
+            url('/hacsfiles/cards-layout/assets/ha-header-devdata.png');
+            background-color: #1678C9 !important;
+        page:
+          title: Strombverbrauch und Energieproduktion
+          icon: 'mdi:power'
+          iconcolor: '#FFFFFF'
+          description: >
+            Auswertung Stromverbrauch für das ganze Haus und der Bericht über
+            die Stromproduktion.
+          style: >-
+            color:#FFFFFF; background: linear-gradient(to top, #047CD1,
+            #CDECFF);  
+          width: 90%
+        content:
+          - row:
+              - columns: null
+                width: 100%
+                entities:
+                  - type: 'custom:chart-card'
+                    title: Energie Verbrauch vs. Produktion
+                    icon: 'mdi:flash'
+                    height: 320
+                    chart: bar
+                    locale: de-DE
+                    hours_to_show: 72
+                    group_by: hour
+                    cardtimestamp: true
+                    theme:
+                      cardbackground: |
+                        linear-gradient(to top, #dc2424, #4a569d)
+                    options:
+                      plugins:
+                        title:
+                          display: true
+                          fontStyle: normal
+                          text: Anzeigezeitraum für 2 Tage
+                        legend:
+                          display: true
+                          position: top
+                      scales:
+                        x:
+                          stacked: true
+                          scaleLabel:
+                            display: true
+                            labelString: Zeitraum
+                        'y':
+                          stacked: true
+                          scaleLabel:
+                            display: true
+                            labelString: kWh
+                    entities:
+                      - options:
+                          unit: kWh
+                          borderWidth: 1
+                      - entity: sensor.power_generated
+                        name: Produktion kWh
+                      - entity: sensor.power_used
+                        name: Verbrauch kWh
+              - columns: null
+                width: 50%
+                entities:
+                  - type: 'custom:chart-card'
+                    title: Verbrauch Geschosse
+                    icon: 'mdi:flash'
+                    height: 320
+                    chart: pie
+                    locale: de-DE
+                    cardtimestamp: true
+                    theme:
+                      cardbackground: |
+                        linear-gradient(to top, #dc2424, #4a569d)
+                    options:
+                      plugins:
+                        title:
+                          display: true
+                          fontStyle: normal
+                          text: Aktueller Energie Verbrauch kWh
+                        legend:
+                          display: true
+                          position: top
+                    entities:
+                      - options:
+                          unit: kWh
+                          borderWidth: 1
+                      - entity: sensor.energie_erdgeschoss
+                        name: EG
+                      - entity: sensor.energie_wohngeschoss
+                        name: 1.OG
+                      - entity: sensor.energie_obergeschoss
+                        name: 2.OG
+                      - entity: sensor.energie_dachgeschoss
+                        name: DG
+              - columns: null
+                width: 100%
+                entities:
+                  - type: 'custom:chart-card'
+                    title: Verbrauch Räume
+                    icon: 'mdi:flash'
+                    height: 320
+                    chart: bar
+                    locale: de-DE
+                    cardtimestamp: true
+                    theme:
+                      cardbackground: |
+                        linear-gradient(to top, #dc2424, #4a569d)
+                    options:
+                      plugins:
+                        title:
+                          display: true
+                          fontStyle: normal
+                          text: Aktueller Energie Verbrauch kWh
+                        legend:
+                          display: true
+                          position: top
+                      scales:
+                        'y':
+                          ticks:
+                            suggestedMax: -1000
+                          scaleLabel:
+                            display: true
+                            labelString: kWh
+                    entities:
+                      - options:
+                          unit: kWh
+                          borderWidth: 1
+                      - entity: sensor.room_eg_office
+                        name: Büro
+                        group: EG
+                      - entity: sensor.room_eg_vorratsraum
+                        name: Vorratsraum
+                        group: EG
+                      - entity: sensor.room_eg_allgemein
+                        name: Allgemein
+                        group: EG
+                      - entity: sensor.room_eg_heizung
+                        name: Heizung
+                        group: EG
+                      - entity: sensor.room_eg_washraum
+                        name: Waschraum
+                        group: EG
+                      - entity: sensor.room_wg_allgemein
+                        name: Flur/WC
+                        group: WG
+                      - entity: sensor.room_wg_kueche
+                        name: Küche
+                        group: WG
+                      - entity: sensor.room_wg_wohnzimmer
+                        name: Wohnzimmer
+                        group: WG
+                      - entity: sensor.room_og_allgemein
+                        name: Flur OG
+                        group: OG
+                      - entity: sensor.room_og_bad
+                        name: Bad
+                        group: OG
+                      - entity: sensor.room_og_kinderzimmer1
+                        name: Kinderzimmer 1
+                        group: OG
+                      - entity: sensor.room_og_kinderzimmer2
+                        name: Kinderzimmer 2
+                        group: OG
+                      - entity: sensor.room_og_schlafzimmer
+                        name: Schlafzimmer
+                        group: OG
+                      - entity: sensor.room_dg_fitnessraum
+                        name: Fitnessraum
+                        group: OG
+                  - type: 'custom:chart-card'
+                    title: Verbrauch Räume pro Tag
+                    icon: 'mdi:flash'
+                    height: 320
+                    chart: bar
+                    locale: de-DE
+                    hours_to_show: 24
+                    group_by: hour
+                    cardtimestamp: true
+                    theme:
+                      cardbackground: |
+                        linear-gradient(to top, #dc2424, #4a569d)
+                    options:
+                      plugins:
+                        title:
+                          display: true
+                          fontStyle: normal
+                          text: Energie Verbrauch kWh der letzten 24h
+                        legend:
+                          display: true
+                          position: top
+                      scales:
+                        x:
+                          stacked: true
+                          scaleLabel:
+                            display: true
+                            labelString: Zeitraum
+                        'y':
+                          stacked: true
+                          scaleLabel:
+                            display: true
+                            labelString: kWh
+                    entities:
+                      - options:
+                          unit: kWh
+                          borderWidth: 1
+                      - entity: sensor.room_eg_office
+                        name: Büro
+                      - entity: sensor.room_eg_vorratsraum
+                        name: Vorratsraum
+                      - entity: sensor.room_eg_allgemein
+                        name: Allgemein
+                      - entity: sensor.room_eg_heizung
+                        name: Heizung
+                      - entity: sensor.room_eg_washraum
+                        name: Waschraum
+                      - entity: sensor.room_wg_allgemein
+                        name: Flur/WC
+                      - entity: sensor.room_wg_kueche
+                        name: Küche
+                      - entity: sensor.room_wg_wohnzimmer
+                        name: Wohnzimmer
+                      - entity: sensor.room_og_allgemein
+                        name: Flur OG
+                      - entity: sensor.room_og_bad
+                        name: Bad
+                      - entity: sensor.room_og_kinderzimmer1
+                        name: Kinderzimmer 1
+                      - entity: sensor.room_og_kinderzimmer2
+                        name: Kinderzimmer 2
+                      - entity: sensor.room_og_schlafzimmer
+                        name: Schlafzimmer
+                      - entity: sensor.room_dg_fitnessraum
+                        name: Fitnessraum
