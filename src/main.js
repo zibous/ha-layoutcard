@@ -31,6 +31,9 @@ console.info(
 const cssAttr = function (v) {
     return typeof v == "number" ? v + "px" : v
 }
+
+var CARDLAYOUTLOAD = 0
+
 /**
  * custom cards layout
  * credits to https://github.com/ofekashery/vertical-stack-in-card
@@ -60,6 +63,7 @@ class CardsLayout extends HTMLElement {
         this.logenabled = false
         this.readyState = false
         this.allLoaded = false
+        CARDLAYOUTLOAD++
     }
 
     /**
