@@ -141,17 +141,17 @@ views:
           style: >-
               background-image: url('/hacsfiles/cards-layout/assets/ui-ux.png');
               background-color: rgb(106, 115, 126);
-          page:
-            title: Page Title
-            icon: 'mdi:view-agenda'
-            description: >-
-                  Description Section 1 Lorem ipsum dolor sit amet, consetetur
-                  sadipscing elitr
-            style: |
-               color: #FFFFFF;
-               background: #bdc3c7; 
-               background: linear-gradient(to top, #bdc3c7, #2c3e50);")
-            width: 80%
+        page:
+          title: Page Title
+          icon: 'mdi:view-agenda'
+          description: >-
+             Description Section 1 Lorem ipsum dolor sit amet, consetetur
+             sadipscing elitr
+          style: |
+             color: #FFFFFF;
+             background: #bdc3c7; 
+             background: linear-gradient(to top, #bdc3c7, #2c3e50);")
+          width: 80%
         content:
           - row:
               - columns: null
@@ -167,6 +167,7 @@ views:
                 entities:
                   - type: picture
                     title: Card 1 Section 1
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
           - row:
@@ -183,10 +184,12 @@ views:
                 entities:
                   - type: picture
                     title: Card 1 Section 2
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1521446477144-773b2dd9b1af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
                   - type: picture
                     title: Card 2 Section 2
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1546551613-09c2f83e1ede?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
           - row:
@@ -203,18 +206,22 @@ views:
                 entities:
                   - type: picture
                     title: Card 1 Section 3
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1560635921-171138a3955e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
                   - type: picture
                     title: Card 2 Section 3
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1545022274-cdffe6d68075?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
                   - type: picture
                     title: Card 3 Section 3
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1598928506311-c55ded91a20c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&q=80                      
                   - type: picture
                     title: Card 4 Section 3
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1593853885764-b1174d704401?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80      
           - row:
@@ -231,6 +238,7 @@ views:
                 entities:
                   - type: picture
                     title: Card 1 Section 4
+                    style: 'ha-card {transform: scale(0.95);}'
                     image: >-
                       https://images.unsplash.com/photo-1544984243-ec57ea16fe25?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
 
