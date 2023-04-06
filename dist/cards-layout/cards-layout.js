@@ -3,13 +3,13 @@
  * https://github.com/zibous/ha-layoutcard
  * 
  * License: MIT
- * Generated on 2021
+ * Generated on 2023
  * Author: Peter siebler
  */
 
 /** --------------------------------------------------------------------
 
-  Custom Layout Card 
+  Custom Layout Card
 
   parts based on https://github.com/ofekashery/vertical-stack-in-card
   credits to: https://github.com/ofekashery
@@ -21,7 +21,7 @@
 const appinfo = {
     name: "✓ custom:cards-layout",
     app: "cards-layout",
-    version: "0.1.1",
+    version: "0.1.5",
     assets: "/hacsfiles/cards-layout/assets/",
     github: "https://github.com/zibous/ha-layoutcard"
 }
@@ -35,9 +35,9 @@ console.info(
 
 /**
  * helper for css attribute
- * @param {*} v 
+ * @param {*} v
  */
-const cssAttr = function (v) {
+const cssAttr = function(v) {
     return typeof v == "number" ? v + "px" : v
 }
 
@@ -100,7 +100,7 @@ class CardsLayout extends HTMLElement {
 
             if (this.skipRender) return
             this.skipRender = true
-            
+
         }
     }
 
@@ -128,10 +128,14 @@ class CardsLayout extends HTMLElement {
         this.pagefooter =
             this._config.footer ||
             'Made with <span style="color: #e25555;">&hearts;</span> by ' +
-                appinfo.app +
-                " &bull; version " +
-                appinfo.version +
-                "."
+            appinfo.app +
+            " &bull; version " +
+            appinfo.version +
+            "."
+
+        this.newHaMode = (document.querySelector("body > home-assistant").shadowRoot
+            .querySelector("home-assistant-main").shadowRoot
+            .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")) == null
 
         this.renderCards()
     }
@@ -157,7 +161,7 @@ class CardsLayout extends HTMLElement {
             z-index: 100;
             background-repeat: no-repeat;
             background-size: contain;
-            background-position: calc(100% - 0px) calc(100%); 
+            background-position: calc(100% - 0px) calc(100%);
             border-bottom: 1px solid rgba(255,255,255,0.25);
         }
         .cl-layout-header-title{
@@ -248,7 +252,7 @@ class CardsLayout extends HTMLElement {
             display: inline-block;
             vertical-align: top;
         }
-       
+
         @media (min-width: 1800px) {
             .cl-card-layer {
                 max-width: 30% !important;
@@ -295,7 +299,7 @@ class CardsLayout extends HTMLElement {
             .cl-layout-header{
                 background-size: 80%;
             }
-            
+
             .cl-layout-header-title h1{
                 font-size: 2.0em;
             }
@@ -463,41 +467,53 @@ class CardsLayout extends HTMLElement {
      */
     setHAGui() {
         // get the home assistant main element
-        const home_assistant_main = document
-            .querySelector("body > home-assistant")
-            .shadowRoot.querySelector("home-assistant-main").shadowRoot
-        // fix the style for the menu button
-        home_assistant_main.querySelector("#drawer > ha-sidebar").shadowRoot.querySelector("div.menu").style.border =
-            "none"
+        const home_assistant_main = document.querySelector("body > home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot
 
-        // all for the toolbar
-        if (this._config.toolbar) {
-            if (this._config.toolbar.backgroundcolor) {
-                home_assistant_main
-                    .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                    .shadowRoot.querySelector("hui-root")
-                    .shadowRoot.querySelector(
-                        "#layout > app-header > app-toolbar"
-                    ).style.backgroundColor = this._config.toolbar.backgroundcolor
+        if (this.newHaMode) {
+            document.querySelector("body > home-assistant").shadowRoot
+                .querySelector("home-assistant-main").shadowRoot
+                .querySelector("ha-drawer")
+                .querySelector("ha-sidebar").shadowRoot
+                .querySelector("div.menu").style.border = "none"
+            if (this._config.toolbar) {
+                if (this._config.toolbar.backgroundcolor) {
+                    _toolbar.style.backgroundColor = this._config.toolbar.backgroundcolor
+                }
+                if (this._config.toolbar.iconcolor) {
+                    _toolbar.style.color = this._config.toolbar.iconcolor
+                }
             }
-            if (this._config.toolbar.iconcolor) {
-                home_assistant_main
-                    .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                    .shadowRoot.querySelector("hui-root")
-                    .shadowRoot.querySelector(
-                        "#layout > app-header > app-toolbar"
-                    ).style.color = this._config.toolbar.iconcolor
-            }
-            if (this._config.toolbar.visible === false) {
-                home_assistant_main
-                    .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                    .shadowRoot.querySelector("hui-root")
-                    .shadowRoot.querySelector("#layout")
-                    .shadowRoot.querySelector("#wrapper > #contentContainer").style.paddingTop = 0
-                home_assistant_main
-                    .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                    .shadowRoot.querySelector("hui-root")
-                    .shadowRoot.querySelector("#layout > app-header > app-toolbar").style.display = "none"
+        } else {
+            home_assistant_main.querySelector("#drawer > ha-sidebar").shadowRoot.querySelector("div.menu").style.border = "none"
+            // all for the toolbar
+            if (this._config.toolbar) {
+                if (this._config.toolbar.backgroundcolor) {
+                    home_assistant_main
+                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
+                        .shadowRoot.querySelector("hui-root")
+                        .shadowRoot.querySelector(
+                            "#layout > app-header > app-toolbar"
+                        ).style.backgroundColor = this._config.toolbar.backgroundcolor
+                }
+                if (this._config.toolbar.iconcolor) {
+                    home_assistant_main
+                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
+                        .shadowRoot.querySelector("hui-root")
+                        .shadowRoot.querySelector(
+                            "#layout > app-header > app-toolbar"
+                        ).style.color = this._config.toolbar.iconcolor
+                }
+                if (this._config.toolbar.visible === false) {
+                    home_assistant_main
+                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
+                        .shadowRoot.querySelector("hui-root")
+                        .shadowRoot.querySelector("#layout")
+                        .shadowRoot.querySelector("#wrapper > #contentContainer").style.paddingTop = 0
+                    home_assistant_main
+                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
+                        .shadowRoot.querySelector("hui-root")
+                        .shadowRoot.querySelector("#layout > app-header > app-toolbar").style.display = "none"
+                }
             }
         }
     }
@@ -547,7 +563,6 @@ class CardsLayout extends HTMLElement {
             }
             this.shadowRoot.appendChild(this.pageHeader)
         }
-
         // ------------------------------------------------
         // page container for all cards
         // ------------------------------------------------
@@ -555,15 +570,19 @@ class CardsLayout extends HTMLElement {
         this.view_layout.setAttribute("class", "cl-layout")
         this.view_layout.setAttribute("id", "cl-" + this.layoutID)
         if (this._config.page && this._config.page.style) {
-            document
-                .querySelector("body > home-assistant")
-                .shadowRoot.querySelector("home-assistant-main")
-                .shadowRoot.querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                .shadowRoot.querySelector("hui-root")
-                .shadowRoot.querySelector("#layout > div > hui-view").style = this._config.page.style.replaceAll(
-                "\n",
-                ""
-            )
+            if (this.newHaMode) {
+                document.querySelector("body > home-assistant")
+                    .shadowRoot.querySelector("home-assistant-main")
+                    .shadowRoot.querySelector("ha-drawer>partial-panel-resolver>ha-panel-lovelace")
+                    .shadowRoot.querySelector("hui-root")
+                    .shadowRoot.querySelector("div>div#view>").style = this._config.page.style.replaceAll("\n", "")
+            } else {
+                document.querySelector("body > home-assistant")
+                    .shadowRoot.querySelector("home-assistant-main")
+                    .shadowRoot.querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
+                    .shadowRoot.querySelector("hui-root")
+                    .shadowRoot.querySelector("#layout > div > hui-view").style = this._config.page.style.replaceAll("\n", "")
+            }
         }
         if (this._config.page && this._config.page.width) {
             this.view_layout.style.width = this.view_layout.style.minWidth = this._config.page.width
@@ -573,7 +592,6 @@ class CardsLayout extends HTMLElement {
         // ----------------------------------------------
         // PAGE HEADER below Layout header
         // ----------------------------------------------
-
         if (this._config.page && (this._config.page.title || this._config.page.description)) {
             // page icon and title (optional)
             if (this._config.page.title) {
@@ -681,6 +699,7 @@ class CardsLayout extends HTMLElement {
             })
 
             this.view_layout.append(view_row)
+
         })
 
         // ----------------------------------------------
@@ -727,7 +746,7 @@ customElements.define("cards-layout", CardsLayout)
 /** --------------------------------------------------------------------
 
   Cards Layout structure
-  
+
   - type: 'custom: cards-layout'
     content:
       - row
@@ -741,5 +760,5 @@ customElements.define("cards-layout", CardsLayout)
       - row
         - columns
           ....
-  
+
 /** -------------------------------------------------------------------*/

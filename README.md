@@ -1,20 +1,38 @@
 # Homeassitant Layout Card
 
-> DEVELOPER PREVIEW VERSION NOT FINAL `Version 0.1.1`
+
+[![License][license-shield]][license]
+[![Open in Visual Studio Code][open-in-vscode-shield]][open-in-vscode]
+[![Support author][donate-me-shield]][donate-me]
+
+[license-shield]: https://img.shields.io/static/v1?label=License&message=MIT&color=orange&logo=license
+[license]: https://opensource.org/licenses/MIT
+
+
+[open-in-vscode-shield]: https://img.shields.io/static/v1?label=+&message=Open+in+VSCode&color=blue&logo=visualstudiocode
+[open-in-vscode]: https://open.vscode.dev/zibous/ha-layoutcard
+
+[donate-me-shield]: https://img.shields.io/static/v1?label=+&color=orange&message=Buy+me+a+coffee
+[donate-me]: https://www.buymeacoff.ee/zibous
+
+<br>
+
+
+> DEVELOPER PREVIEW VERSION NOT FINAL `Version 0.1.5`
 I'm still looking for help and would be happy if someone would get in touch to help me complete and improve the cards-layout.
 
-
+- Bugfix for Home Assistant 2023.4.0
 
 ![ha-layoutcard.png](docs/ha-layoutcard2.png)
 
 
 ## Requirements
 
-- Home Assistant 2021.1.4
-  - Frontend-Version: 20201229.1 - latest
+- Home Assistant 2023.4.0
+  - Frontend 20230405.0 - latest
   - Lovelace Mode
 - Tested Browser
-  - Chrome Version 86.0.4240.111 
+  - Chrome Version 86.0.4240.111
   - Safari Version 13.1.2 (13609.3.5.1.5)
   - Firefox 82.0 (64-Bit)
   - Vivaldi 3.4.2066.76 (Stable channel) (x86_64)
@@ -149,7 +167,7 @@ views:
              sadipscing elitr
           style: |
              color: #FFFFFF;
-             background: #bdc3c7; 
+             background: #bdc3c7;
              background: linear-gradient(to top, #bdc3c7, #2c3e50);")
           width: 80%
         content:
@@ -218,12 +236,12 @@ views:
                     title: Card 3 Section 3
                     style: 'ha-card {transform: scale(0.95);}'
                     image: >-
-                      https://images.unsplash.com/photo-1598928506311-c55ded91a20c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&q=80                      
+                      https://images.unsplash.com/photo-1598928506311-c55ded91a20c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&h=600&q=80
                   - type: picture
                     title: Card 4 Section 3
                     style: 'ha-card {transform: scale(0.95);}'
                     image: >-
-                      https://images.unsplash.com/photo-1593853885764-b1174d704401?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80      
+                      https://images.unsplash.com/photo-1593853885764-b1174d704401?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&h=600&q=80
           - row:
               - columns: null
                 width: 100%
@@ -253,8 +271,8 @@ views:
 - ~~how to call hass and config for a custom:card (update data custom:card do not work !) ?~~  -->  this.provideHass(element);
 
 ## Helper
-- [YAML to JSON Online](https://www.convertjson.com/yaml-to-json.htm) - Use this online tool to convert YAML into JSON. 
-- [JSON to YAML Online](https://www.convertjson.com/json-to-yaml.htm) - Use this online tool to convert JSON into YAML. 
+- [YAML to JSON Online](https://www.convertjson.com/yaml-to-json.htm) - Use this online tool to convert YAML into JSON.
+- [JSON to YAML Online](https://www.convertjson.com/json-to-yaml.htm) - Use this online tool to convert JSON into YAML.
 - [uiGradients](https://uigradients.com/#ByDesign)  - Beautiful colored gradients
 - [Unsplash](https://unsplash.com/) - The internet’s source of freely-usable images.
 - [100 awesome illustration](https://illlustrations.co) - Open source illustrations kit
