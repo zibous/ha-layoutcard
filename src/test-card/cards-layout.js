@@ -1,5 +1,5 @@
 /**
- * ha-layoutcard for homeassistant
+ * ha-layoutcard 0.0.4
  * https://github.com/zibous/ha-layoutcard
  *
  * License: MIT
@@ -72,7 +72,6 @@ class CardsLayout extends HTMLElement {
         this.logenabled = false
         this.readyState = false
         this.allLoaded = false
-        this.newHaMode = true
         CARDLAYOUTLOAD++
     }
 
@@ -97,11 +96,8 @@ class CardsLayout extends HTMLElement {
                 this.allLoaded = true
             }
             if (this.view_footer && this.pagefooter)
-                if (this.newHaMode) {
-                    this.view_footer.innerHTML = "≔ " + this.pagefooter + " ⟲ " + this.localDatetime()
-                }else{
-                    this.view_footer.innerHTML = "⧠ " + this.pagefooter + " ⟲ " + this.localDatetime()
-                }
+                this.view_footer.innerHTML = this.pagefooter + " ⟲ " + this.localDatetime()
+
             if (this.skipRender) return
             this.skipRender = true
 
@@ -117,16 +113,12 @@ class CardsLayout extends HTMLElement {
         if (!config || !config.content || !Array.isArray(config.content)) {
             throw new Error("Card config incorrect")
         }
-        this.newHaMode = (document.querySelector("body > home-assistant").shadowRoot
-            .querySelector("home-assistant-main").shadowRoot
-            .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")) == null
-
         if (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild)
-            this.addCss()
-            this._config = Object.assign({}, config)
+        this.addCss()
+        this._config = Object.assign({}, config)
 
-            if (this._config && this._config.header) {
-                this.setHAGui()
+        if (this._config && this._config.header) {
+            this.setHAGui()
         }
 
         // developer logger can be enabled by yaml
@@ -473,47 +465,14 @@ class CardsLayout extends HTMLElement {
         // get the home assistant main element
         const home_assistant_main = document.querySelector("body > home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot
         document.querySelector("body > home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot.querySelector("ha-drawer").querySelector("ha-sidebar").shadowRoot.querySelector("div.menu").style.border="none"
-
-        if (this.newHaMode) {
-            const _toolbar = document.querySelector("body > home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot.querySelector("ha-drawer>partial-panel-resolver>ha-panel-lovelace").shadowRoot.querySelector("hui-root").shadowRoot.querySelector("div > div > div")
-            // all for the toolbar
-            if (this._config.toolbar) {
-                if (this._config.toolbar.backgroundcolor) {
-                    _toolbar.style.backgroundColor = this._config.toolbar.backgroundcolor
-                }
-                if (this._config.toolbar.iconcolor) {
-                    _toolbar.style.color = this._config.toolbar.iconcolor
-                }
+        const _toolbar = document.querySelector("body > home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot.querySelector("ha-drawer>partial-panel-resolver>ha-panel-lovelace").shadowRoot.querySelector("hui-root").shadowRoot.querySelector("div > div > div")
+        // all for the toolbar
+        if (this._config.toolbar) {
+            if (this._config.toolbar.backgroundcolor) {
+                _toolbar.style.backgroundColor = this._config.toolbar.backgroundcolor
             }
-        }else{
-            if (this._config.toolbar) {
-                if (this._config.toolbar.backgroundcolor) {
-                    home_assistant_main
-                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                        .shadowRoot.querySelector("hui-root")
-                        .shadowRoot.querySelector(
-                            "#layout > app-header > app-toolbar"
-                        ).style.backgroundColor = this._config.toolbar.backgroundcolor
-                }
-                if (this._config.toolbar.iconcolor) {
-                    home_assistant_main
-                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                        .shadowRoot.querySelector("hui-root")
-                        .shadowRoot.querySelector(
-                            "#layout > app-header > app-toolbar"
-                        ).style.color = this._config.toolbar.iconcolor
-                }
-                if (this._config.toolbar.visible === false) {
-                    home_assistant_main
-                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                        .shadowRoot.querySelector("hui-root")
-                        .shadowRoot.querySelector("#layout")
-                        .shadowRoot.querySelector("#wrapper > #contentContainer").style.paddingTop = 0
-                    home_assistant_main
-                        .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                        .shadowRoot.querySelector("hui-root")
-                        .shadowRoot.querySelector("#layout > app-header > app-toolbar").style.display = "none"
-                }
+            if (this._config.toolbar.iconcolor) {
+                _toolbar.style.color = this._config.toolbar.iconcolor
             }
         }
     }
@@ -571,44 +530,12 @@ class CardsLayout extends HTMLElement {
         this.view_layout.setAttribute("class", "cl-layout")
         this.view_layout.setAttribute("id", "cl-" + this.layoutID)
         if (this._config.page && this._config.page.style) {
-            if (this.newHaMode) {
-                document.querySelector("body > home-assistant")
-                    .shadowRoot.querySelector("home-assistant-main")
-                    .shadowRoot.querySelector("ha-drawer>partial-panel-resolver>ha-panel-lovelace")
-                    .shadowRoot.querySelector("hui-root")
-                    .shadowRoot.querySelector("div>div#view").style = this._config.page.style.replaceAll("\n","")
-            }else{
-                if (this._config.toolbar) {
-                    if (this._config.toolbar.backgroundcolor) {
-                        home_assistant_main
-                            .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                            .shadowRoot.querySelector("hui-root")
-                            .shadowRoot.querySelector(
-                                "#layout > app-header > app-toolbar"
-                            ).style.backgroundColor = this._config.toolbar.backgroundcolor
-                    }
-                    if (this._config.toolbar.iconcolor) {
-                        home_assistant_main
-                            .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                            .shadowRoot.querySelector("hui-root")
-                            .shadowRoot.querySelector(
-                                "#layout > app-header > app-toolbar"
-                            ).style.color = this._config.toolbar.iconcolor
-                    }
-                    if (this._config.toolbar.visible === false) {
-                        home_assistant_main
-                            .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                            .shadowRoot.querySelector("hui-root")
-                            .shadowRoot.querySelector("#layout")
-                            .shadowRoot.querySelector("#wrapper > #contentContainer").style.paddingTop = 0
-                        home_assistant_main
-                            .querySelector("app-drawer-layout > partial-panel-resolver > ha-panel-lovelace")
-                            .shadowRoot.querySelector("hui-root")
-                            .shadowRoot.querySelector("#layout > app-header > app-toolbar").style.display = "none"
-                    }
-                }
-            }
-
+            document
+              .querySelector("body > home-assistant")
+              .shadowRoot.querySelector("home-assistant-main")
+              .shadowRoot.querySelector("ha-drawer>partial-panel-resolver>ha-panel-lovelace")
+              .shadowRoot.querySelector("hui-root")
+              .shadowRoot.querySelector("div>div#view").style = this._config.page.style.replaceAll("\n","")
         }
         if (this._config.page && this._config.page.width) {
             this.view_layout.style.width = this.view_layout.style.minWidth = this._config.page.width
@@ -734,11 +661,7 @@ class CardsLayout extends HTMLElement {
         if (this.pagefooter && this.pagefooter != "") {
             this.view_footer = document.createElement("div")
             this.view_footer.setAttribute("class", "cl-layout-footer")
-            if (this.newHaMode) {
-                this.view_footer.innerHTML = "≔ " + this.pagefooter + " ⟲ " + this.localDatetime()
-            }else{
-                this.view_footer.innerHTML = "⧠ " + this.pagefooter + " ⟲ " + this.localDatetime()
-            }
+            this.view_footer.innerHTML = this.pagefooter + " ⟲ " + this.localDatetime()
             this.view_layout.append(this.view_footer)
         }
         this.shadowRoot.appendChild(this.view_layout)
